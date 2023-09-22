@@ -100,7 +100,11 @@ ipython_config.py
 #   commonly ignored for libraries.
 #   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
 <<<<<<< HEAD
+<<<<<<< HEAD
 # poetry.lock
+=======
+#poetry.lock
+>>>>>>> 093cff8da6204c1da8d672d111e4856677e1ed8d
 =======
 #poetry.lock
 >>>>>>> 093cff8da6204c1da8d672d111e4856677e1ed8d
@@ -161,6 +165,7 @@ cython_debug/
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
+<<<<<<< HEAD
 <<<<<<< HEAD
 # .idea/
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
@@ -242,3 +247,6 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 #.idea/
 
+=======
+#.idea/
+>>>>>>> 093cff8da6204c1da8d672d111e4856677e1ed8d
