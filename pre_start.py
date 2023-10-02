@@ -1,4 +1,5 @@
 import logging
+import alembic.config
 
 from db.session import SessionLocal
 from sqlalchemy import text
@@ -8,6 +9,12 @@ logger = logging.getLogger(__name__)
 
 
 def init() -> None:
+    alembicArgs = [
+        '--raiseerr',
+        'upgrade', 'head',
+    ]
+    alembic.config.main(argv=alembicArgs)
+
     try:
         with SessionLocal() as db:
             # Try to create session to check if DB is awake

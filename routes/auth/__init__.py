@@ -41,8 +41,10 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
         )
 
     return {
-        "access_token": create_access_token({
-            "sub": form_data.username,
-        }),
+        "access_token": create_access_token(
+            {
+                "sub": form_data.username,
+            }
+        ),
         "token_type": "bearer",
     }
