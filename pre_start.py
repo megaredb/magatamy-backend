@@ -10,8 +10,9 @@ logger = logging.getLogger(__name__)
 
 def init() -> None:
     alembicArgs = [
-        '--raiseerr',
-        'upgrade', 'head',
+        "--raiseerr",
+        "upgrade",
+        "head",
     ]
     alembic.config.main(argv=alembicArgs)
 

@@ -17,7 +17,7 @@ def main_page(request: Request):
 
 async def _map_reverse_proxy(request: Request):
     print(request.url.path)
-    path = request.url.path[len("/map"):]
+    path = request.url.path[len("/map") :]
     print(path)
     url = URL(path=path, query=request.url.query.encode("utf-8"))
     rp_req = map_client.build_request(

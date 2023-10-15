@@ -19,6 +19,8 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 a2wsgi = "^1.7.0"
 httpx = "^0.25.0"
+disnake = "^2.9.0"
+rcon = "^2.4.4"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
