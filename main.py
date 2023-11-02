@@ -1,11 +1,7 @@
-from sys import executable
-
-import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 from routes import api, misc, auth
-from subprocess import Popen
 
 tags_metadata = [
     {
@@ -33,19 +29,8 @@ app.include_router(api.api_router)
 app.include_router(misc.api_router)
 app.include_router(auth.api_router)
 
-discord_process: Popen
-
-
-@app.on_event("startup")
-async def startup_event():  # Функция, выполняемая FastAPI после запуска.
-    global discord_process
-    discord_process = Popen([executable, "main.py"], cwd="./discordbot/")
-
-
-@app.on_event("shutdown")
-async def shutdown_event():  # Функция, выполняемая FastAPI после выключения.
-    discord_process.terminate()
-
 
 if __name__ == "__main__":
+    import uvicorn
+
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
