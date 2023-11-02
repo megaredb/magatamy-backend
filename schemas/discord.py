@@ -3,9 +3,9 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class DiscordError(BaseModel):
-    message: str
-    code: int
+# class DiscordError(BaseModel):
+#     message: str
+#     code: int
 
 
 class DiscordUser(BaseModel):

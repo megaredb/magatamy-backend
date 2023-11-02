@@ -1,10 +1,17 @@
-from crud.base import CRUDBase
-from models import Product
-from schemas.product import ProductCreate, ProductUpdate
+from typing import Optional, Any
+
+from sqlalchemy.orm import Session
+
+from crud.base import CRUDBase, ModelType
+from models import User
+from schemas import UserCreate, UserUpdate
 
 
-class CRUDDiscordUser(CRUDBase[Product, ProductCreate, ProductUpdate]):
-    pass
+class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
+    def get_by_discord_id(self, db: Session, discord_id: Any) -> Optional[ModelType]:
+        return (
+            db.query(self.model).filter(self.model.discord_id.is_(discord_id)).first()
+        )
 
 
-product = CRUDDiscordUser(Product)
+user = CRUDUser(User)
