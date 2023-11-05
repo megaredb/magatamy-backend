@@ -11,6 +11,7 @@ import schemas
 from crud import user
 from routes.api import deps
 from schemas import UserCreate, UserUpdate
+from utils import config
 from utils.config import BOT_TOKEN
 from utils.discord import exchange_code, get_auth_url, revoke_access_token
 from utils.discord.user import get_user
@@ -25,7 +26,7 @@ def auth_middleware(
 ) -> dict:
     cookies = request.cookies
 
-    if not cookies:
+    if not cookies.get("access_token"):
         return {}
 
     discord_user = get_user(cookies.get("token_type"), cookies.get("access_token"))
@@ -117,9 +118,11 @@ def get_auth_callback(
 
         raise HTTPException(err.response.status_code, detail=resp_json)
 
-    yield auth_middleware(request, db)
+    auth_middleware(request, db)
 
     expires = cookies.pop("expires_in")
 
     for cookie in cookies.keys():
         response.set_cookie(cookie, cookies.get(cookie), expires=expires, httponly=True)
+
+    return RedirectResponse(config.BASE_URI)

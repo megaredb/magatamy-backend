@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Социальные сети{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', path='/css/social.css') }}">{% endblock %}
+{% block content %}
+<main>
+    <div class="cardsUsers">
+        <div id="cardImageUser" class="card"></div>
+    </div>
+</main>
+
+<script src="{{ url_for('static', path='/js/discordImage.js') }}"></script>
+{% endblock%}

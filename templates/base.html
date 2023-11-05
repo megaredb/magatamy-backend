@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magatamy - {% block title %}{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', path='/image/icon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+<header>
+    <a href="/"><img src="{{ url_for('static', path='/image/icon.png') }}" alt=""></a>
+    <a href="#">
+        <h1 style="text-decoration: none; float: left; color: #FF7F66;
+            text-shadow: 0px 0px 10px#FF7F66;
+           padding-top: 15px; margin-left: 15px;">{{ title }}
+        </h1>
+    </a>
+    <div class="smena-language"><a class="language translate" href="">Язык</a>
+        <nav class="langNav">
+            <button class="lang" onclick="translateText('RU')">RU</button>
+            <button class="lang" onclick="translateText('US')">US</button>
+            <button class="lang" onclick="translateText('UA')">UA</button>
+        </nav>
+    </div>
+
+    <ul>
+        <li><a href="/social" class="translate">Социальные сети</a></li>
+        <li><a href="/shop" class="translate">Магазин</a></li>
+        <li><a href="http://map.magatamy.com:25575/" class="translate" target="_blank">Карта мира</a></li>
+        <li><a href="https://chernyi.gitbook.io/magatamy/" class="translate" target="_blank">Wiki</a></li>
+        <li><a href="#/" class="translate" target="_blank">Вход</a></li>
+    </ul>
+</header>
+{% block content %} {% endblock %}
+<footer class="footer">
+    <ul class="social-icon">
+        <li class="social-icon__item"><a class="social-icon__link" href="https://discord.magatamy.com"
+                                         target="_blank">
+            <ion-icon name="logo-discord"></ion-icon>
+        </a></li>
+        <li class="social-icon__item"><a class="social-icon__link" href="https://www.tiktok.com/@magatamy"
+                                         target="_blank">
+            <ion-icon name="logo-tiktok"></ion-icon>
+        </a></li>
+        <li class="social-icon__item"><a class="social-icon__link" href="https://www.youtube.com/@Magatamy"
+                                         target="_blank">
+            <ion-icon name="logo-youtube"></ion-icon>
+        </a></li>
+    </ul>
+    <ul class="menu">
+        <li class="menu__item"><a class="menu__link" href="#">Главная</a></li>
+        <li class="menu__item"><a class="menu__link" href="/shop">Магазин</a></li>
+        <li class="menu__item"><a class="menu__link" href="http://map.magatamy.com:25575/" target="_blank">Карта мира</a></li>
+        <li class="menu__item"><a class="menu__link" href="#">Помощь</a></li>
+        <li class="menu__item"><a class="menu__link" href="https://chernyi.gitbook.io/magatamy/" target="_blank">Wiki</a></li>
+    </ul>
+    <p>© 2022 - 2023 𝕊𝕜𝕖ℝ𝕚𝕔𝕙.</p>
+</footer>
+</body>
+</html>

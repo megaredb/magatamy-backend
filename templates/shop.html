@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Магазин{% endblock %}
+{% block content %}
+<div class="shop">
+    <h1 class="shop-catalog">Магазин</h1>
+    <div class="products"></div>
+</div>
+
+<form class="decor">
+    <div class="form-left-decoration"></div>
+    <div class="form-right-decoration"></div>
+    <div class="circle"></div>
+    <div class="form-inner">
+        <h3>Оформление заказа</h3>
+        <input type="text" placeholder="Имя пользователя">
+        <input type="email" placeholder="Ваш Email">
+        <textarea placeholder="Сообщение..." rows="3"></textarea>
+        <input type="submit" value="Отправить">
+    </div>
+</form>
+
+<script src="{{ url_for('static', path='/js/products.js') }}"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+{% endblock%}

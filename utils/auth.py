@@ -4,6 +4,8 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from passlib.context import CryptContext
 
+from utils import config
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -32,4 +34,4 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
 
 ADMIN_LOGIN = "admin"
-ADMIN_PASSWORD = get_password_hash(r"uPNLEtrapYJofOgl+bMQ7VBSrCsi")
+ADMIN_PASSWORD = get_password_hash(config.ADMIN_PASSWORD)

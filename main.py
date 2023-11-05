@@ -1,7 +1,7 @@
 from os import environ
 from dotenv import load_dotenv
 
-load_dotenv(".env" if not environ["DEV"] else ".env.dev")
+load_dotenv(".env" if not environ.get("DEV") else ".env.dev")
 
 from fastapi import FastAPI  # noqa: E402
 from starlette.middleware.cors import CORSMiddleware  # noqa: E402

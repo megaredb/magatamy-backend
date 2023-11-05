@@ -249,6 +249,8 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 #.idea/
 
+*.db
+
 =======
 .idea/
 >>>>>>> 093cff8da6204c1da8d672d111e4856677e1ed8d
