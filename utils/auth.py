@@ -10,7 +10,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-SECRET_KEY = "319522c2b932454a172699ab18dcbbbf8620c196e79afc2b358825de84609c83"
+SECRET_KEY = config.SECRET_KEY
 ALGORITHM = "HS256"
 
 

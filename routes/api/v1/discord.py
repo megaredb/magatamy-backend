@@ -11,7 +11,6 @@ import schemas
 from crud import user
 from routes.api import deps
 from schemas import UserCreate, UserUpdate
-from utils import config
 from utils.config import BOT_TOKEN
 from utils.discord import exchange_code, get_auth_url, revoke_access_token
 from utils.discord.user import get_user
@@ -100,7 +99,6 @@ def logout(request: Request, response: Response):
 def get_auth_callback(
     code: str,
     request: Request,
-    response: Response,
     db: Annotated[Session, Depends(deps.get_db)],
 ):
     """
@@ -122,7 +120,14 @@ def get_auth_callback(
 
     expires = cookies.pop("expires_in")
 
-    for cookie in cookies.keys():
-        response.set_cookie(cookie, cookies.get(cookie), expires=expires, httponly=True)
+    resp = RedirectResponse("/")
 
-    return RedirectResponse(config.BASE_URI)
+    for cookie in cookies.keys():
+        resp.set_cookie(
+            cookie,
+            cookies.get(cookie),
+            expires=expires,
+            httponly=True,
+        )
+
+    return resp

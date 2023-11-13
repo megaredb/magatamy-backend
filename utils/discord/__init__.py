@@ -1,6 +1,6 @@
 from urllib.parse import urlencode
 
-from httpx import post, get
+from httpx import post
 from utils import config
 
 

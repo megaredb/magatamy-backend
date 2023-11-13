@@ -4,6 +4,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: Montserrat;
 }
 
 ::-webkit-scrollbar {
@@ -21,14 +22,14 @@ body {
 
 header {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
   width: 100%;
-  padding: 15px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
   text-align: center;
+  height: 4rem;
   background: rgb(32, 29, 29);
-  z-index: 15;
+
 }
 
 header img {
@@ -36,33 +37,28 @@ header img {
   border-radius: 5px;
 }
 
-.header-img {
-  margin-left: 120px;
-  width: 120px;
-  height: 60px;
-}
-
 header ul {
-  list-style-type: none;
-  float: right;
-  margin-top: 20px;
+    display: inline-block;
 }
 
 header ul li {
   display: inline-block;
-  margin-right: 15px;
-  margin-left: 15px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 header ul li a {
-  font-family: 'Alegreya', serif;
   color: #FF7F66;
   text-decoration: none;
-  font-size: 20px;
+  font-size: 18px;
+  text-align: center;
 }
 
 .vector-down {
+  float: none;
   vertical-align: middle;
+  width: 20px;
+  filter: brightness(1000%);
 }
 
 .language:hover .vector-down {
@@ -71,33 +67,42 @@ header ul li a {
 }
 
 nav {
+  left: 50%;
+  position: absolute;
   background: #fff;
-  width: 120px;
   opacity: 0;
   transition: .5s;
   pointer-events: none;
   border-radius: 25px;
   overflow: hidden;
   box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.078);
+  transform: translateX(-50%);
 }
 
 .smena-language{
+  position: relative;
   float: left;
   list-style-type: none;
   margin-left: 30px;
-  height: 100px;
   align-items: center;
+}
+
+.left{
+    display: flex;
+    align-items: center;
+}
+
+.center{
+    margin-right: 38px;
 }
 
 .language{
-  vertical-align: center;
-  align-items: center;
-  vertical-align: bottom;
-}
-
-.langNav{
-  position: absolute;
-  margin-left: -50px;
+  display: inline-block;
+  text-decoration: none;
+  color: #FF7F66;
+  width: 40px;
+  line-height: 20px;
+  vertical-align: middle;
 }
 
 .smena-language:hover nav {
@@ -123,6 +128,21 @@ nav {
 
 .strelkaDown{
   height: 30px;
+}
+
+.avatarUser{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 100px;
+}
+
+.logout{
+    float: right;
+    display: block;
+    width: 50px;
+    color: aqua;
+    margin-top: 5px;
 }
 
 .info {
@@ -509,8 +529,6 @@ nav {
   font-size: 24px;
   color: #707981;
 }
-
-
 
 .social-icons {
   padding: 0;
