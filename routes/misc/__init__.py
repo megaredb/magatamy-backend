@@ -46,13 +46,13 @@ async def main_page(
     )
 
 
-@api_router.get("/shop", response_class=HTMLResponse)
+@api_router.get("/server-pass", response_class=HTMLResponse)
 async def shop_page(
     request: Request,
     db: Annotated[Session, Depends(deps.get_db)],
 ):
     return templates.TemplateResponse(
-        "shop.html", prepare_request_for_template({"request": request}, db)
+        "server-pass.html", prepare_request_for_template({"request": request}, db)
     )
 
 
