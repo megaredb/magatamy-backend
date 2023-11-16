@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block links %}
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/servers.css') }}">
+{% endblock %}
+{% block scripts %}{% endblock %}
+{% block content %}
+    <section class="server-request-container">
+        <div class="server-request">
+            <h3>Magatamy begemot</h3>
+            <div class="server-image">
+                <img src="{{ url_for('static', path='/image/test2.png') }}" alt="Server Image">
+            </div>
+            <p class="server-description">Тут типо описание сервера</p>
+            <div class="server-request-navigation">
+                <a href="#">
+                    <button>Подать заявку</button>
+                </a>
+                <div class="server-request-players">
+                    <p>0</p>
+                    <div>
+                        <img src="{{ url_for('static', path='/image/user.png') }}" alt="Users">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="server-request">
+            <h3>Magatamy main</h3>
+            <div class="server-image">
+                <img src="{{ url_for('static', path='/image/test2.png') }}" alt="Server Image">
+            </div>
+            <p class="server-description">Тут типо описание сервера</p>
+            <div class="server-request-navigation">
+                <a href="#">
+                    <button>Подать заявку</button>
+                </a>
+                <div class="server-request-players">
+                    <p>0</p>
+                    <div>
+                        <img src="{{ url_for('static', path='/image/user.png') }}" alt="Users">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

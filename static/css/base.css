@@ -6,7 +6,7 @@
     padding: 10px calc((100vw - 1300px) / 2);
 }
 
-@media only screen and (max-width: 1320px) {
+@media only screen and (max-width: 1310px) {
     .content section {
         padding: 10px;
     }

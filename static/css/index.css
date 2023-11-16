@@ -1,7 +1,7 @@
 @import 'colors.css';
 
 h3 {
-    font-size: 48px;
+    font-size: 44px;
     text-align: center;
     padding: 20px 0;
 }
@@ -56,11 +56,11 @@ h3 {
 }
 
 .info-container .info-content h2 {
-    font-size: 36px;
+    font-size: 34px;
 }
 
 .info-container .info-content p {
-    font-size: 22px;
+    font-size: 20px;
     padding-top: 10px
 }
 
@@ -121,6 +121,20 @@ h3 {
 
 .staff-description {
     font-size: 18px;
+}
+
+@media only screen and (max-width: 1310px) {
+    h3 {
+        font-size: 48px;
+    }
+
+    .info-container .info-content h2 {
+        font-size: 36px;
+    }
+
+    .info-container .info-content p {
+        font-size: 22px;
+    }
 }
 
 @media only screen and (max-width: 930px) {
