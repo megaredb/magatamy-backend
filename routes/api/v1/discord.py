@@ -83,16 +83,20 @@ def login_to_discord() -> Response:
 
 
 @router.get("/logout")
-def logout(request: Request, response: Response):
+def logout(request: Request):
     """
     Logout from Discord.
     """
+    response = RedirectResponse("/")
+
     cookies = request.cookies
     if access_token := cookies.get("access_token"):
         revoke_access_token(access_token)
 
     for cookie in cookies:
         response.delete_cookie(cookie, httponly=True)
+
+    return response
 
 
 @router.get("/callback")

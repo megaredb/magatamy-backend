@@ -27,7 +27,8 @@ def prepare_request_for_template(resp_dict: dict, db: Session) -> dict:
                 "avatar_url": (
                     f"https://cdn.discordapp.com/avatars/"
                     f"{user.get('id')}/{user.get('avatar')}.webp?size=64"
-                )
+                ),
+                "username": user.get('username')
             }
         )
 

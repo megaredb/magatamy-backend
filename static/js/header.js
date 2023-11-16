@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var menuImage = '/static/image/menu.png';
 
     firstSection.style.paddingTop = header.offsetHeight + 'px';
+    itemsСontainer.style.paddingTop = header.offsetHeight + 'px';
 
     document.querySelector('.header-items-menu').addEventListener('click', function () {
         var fullPath = image.src;
@@ -16,6 +17,13 @@ document.addEventListener("DOMContentLoaded", function () {
             image.src = exitImage;
             itemsСontainer.style.display = 'flex';
         } else {
+            image.src = menuImage;
+            itemsСontainer.style.display = 'none';
+        }
+    });
+
+    window.addEventListener('resize', function () {
+        if (window.innerWidth > 930) {
             image.src = menuImage;
             itemsСontainer.style.display = 'none';
         }

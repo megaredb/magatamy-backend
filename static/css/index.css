@@ -1,5 +1,11 @@
 @import 'colors.css';
 
+h3 {
+    font-size: 48px;
+    text-align: center;
+    padding: 20px 0;
+}
+
 .welcome-container {
     background-image: url('/static/image/bg-winter.webp');
     background-size: cover;
@@ -22,4 +28,115 @@
 .welcome-container p {
     font-size: 36px;
     color: var(--yellow);
+    text-align: center;
+}
+
+.info-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.info-container .info-image {
+    width: 35%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.info-container .info-image img {
+    width: 100%;
+}
+
+.info-container .info-content {
+    width: 65%;
+    padding: 10px;
+}
+
+.info-container .info-content h2 {
+    font-size: 36px;
+}
+
+.info-container .info-content p {
+    font-size: 22px;
+    padding-top: 10px
+}
+
+.about-the-server .reverse-image {
+    flex-direction: row-reverse
+}
+
+.staff-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.staff-card {
+    background-color: var(--grey);
+    display: flex;
+    padding: 10px;
+    margin: 20px;
+    width: 368px;
+    border-radius: 5%;
+    box-shadow: 0 4px 8px rgba(var(--black), 0.4);
+}
+
+.staff-image {
+    width: 120px;
+    height: 120px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.staff-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 30%;
+    box-shadow: 0 4px 8px rgba(var(--black), 0.4);
+}
+
+.staff-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding-left: 10px;
+}
+
+.staff-name {
+    font-size: 28px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 14ch;
+}
+
+.staff-description {
+    font-size: 18px;
+}
+
+@media only screen and (max-width: 930px) {
+    .about-the-server .reverse-image,
+    .info-container {
+        flex-direction: column;
+    }
+
+    .info-container .info-image,
+    .info-container .info-content {
+        width: 100%;
+    }
+
+    .info-container .info-image {
+        height: calc((100vw / 3.6));
+        overflow: hidden;
+        margin: 20px 0;
+    }
 }

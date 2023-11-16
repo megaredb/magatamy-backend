@@ -3,5 +3,11 @@
     min-height: 100vh;
 }
 .content section {
-    padding: 0 10%;
+    padding: 10px calc((100vw - 1300px) / 2);
+}
+
+@media only screen and (max-width: 1320px) {
+    .content section {
+        padding: 10px;
+    }
 }

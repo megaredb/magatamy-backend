@@ -3,11 +3,47 @@
 {% block links %}
     <link rel="stylesheet" href="{{ url_for('static', path='/css/index.css') }}">
 {% endblock %}
-{% block scripts %}{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', path='/js/card-staff.js') }}"></script>
+{% endblock %}
 
 {% block content %}
     <section class="welcome-container">
         <h1>MAGATAMY</h1>
         <p>Выживание с атмосферным комьюнити и уникальными фишками</p>
+    </section>
+    <section class="about-the-server">
+        <h3>О сервере minecraft</h3>
+        <div class="info-container">
+            <div class="info-image">
+                <img src="{{ url_for('static', path='/image/test.png') }}" alt="">
+            </div>
+            <div class="info-content">
+                <h2>Ну тут типо какойто заголовок</h2>
+                <p>Ну а тут текст что будет тут написано ну как бы интересно но не очень, зачем это читать? ето будет чимтать? ну я хз но он тут будет для теста вот так вот мои сладенькие.</p>
+            </div>
+        </div>
+        <div class="info-container reverse-image">
+            <div class="info-image">
+                <img src="{{ url_for('static', path='/image/test.png') }}" alt="">
+            </div>
+            <div class="info-content">
+                <h2>Ну тут типо какойто заголовок</h2>
+                <p>Ну а тут текст что будет тут написано ну как бы интересно но не очень, зачем это читать? ето будет чимтать? ну я хз но он тут будет для теста вот так вот мои сладенькие.</p>
+            </div>
+        </div>
+        <div class="info-container">
+            <div class="info-image">
+                <img src="{{ url_for('static', path='/image/test.png') }}" alt="">
+            </div>
+            <div class="info-content">
+                <h2>Ну тут типо какойто заголовок</h2>
+                <p>Ну а тут текст что будет тут написано ну как бы интересно но не очень, зачем это читать? ето будет чимтать? ну я хз но он тут будет для теста вот так вот мои сладенькие.</p>
+            </div>
+        </div>
+    </section>
+    <section class="project-staff">
+        <h3>Cотрудники</h3>
+        <div class="staff-container"></div>
     </section>
 {% endblock %}
