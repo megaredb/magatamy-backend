@@ -6,8 +6,11 @@ document.addEventListener("DOMContentLoaded", function () {
     var exitImage = '/static/image/exit.png';
     var menuImage = '/static/image/menu.png';
 
-    firstSection.style.paddingTop = header.offsetHeight + 'px';
-    itemsСontainer.style.paddingTop = header.offsetHeight + 'px';
+    function setPadding() {
+        firstSection.style.paddingTop = header.offsetHeight + 'px';
+        itemsСontainer.style.paddingTop = header.offsetHeight + 'px';
+    }
+    setPadding()
 
     document.querySelector('.header-items-menu').addEventListener('click', function () {
         var fullPath = image.src;
@@ -23,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     window.addEventListener('resize', function () {
+        setPadding()
         if (window.innerWidth > 930) {
             image.src = menuImage;
             itemsСontainer.style.display = 'none';

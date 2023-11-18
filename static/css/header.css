@@ -168,7 +168,7 @@ body {
 
     .header-user a,
     .header-items a {
-        padding: 0 1%;
+        padding: 0 3%;
     }
 }
 @media only screen and (max-width: 930px) {

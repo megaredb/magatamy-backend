@@ -20,15 +20,8 @@ h3 {
     justify-content: center;
 }
 
-.welcome-container h1 {
-    font-size: 98px;
-    color: var(--yellow);
-}
-
-.welcome-container p {
-    font-size: 36px;
-    color: var(--yellow);
-    text-align: center;
+.welcome-container img {
+    width: 800px;
 }
 
 .info-container {
@@ -80,7 +73,7 @@ h3 {
     padding: 10px;
     margin: 20px;
     width: 368px;
-    border-radius: 5%;
+    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(var(--black), 0.4);
 }
 

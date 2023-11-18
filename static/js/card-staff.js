@@ -1,21 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
     var staffContainers = document.querySelector(".staff-container");
+    let staffCards = ``
 
     var staffs = {
         "227117061011144704": "Основатель проекта",
         "513975760189390855": "Правая рука",
         "493318176189448204": "API разработчик",
-        "463661523181502464": "Блогер",
         "946480717813121024": "3D модельер",
         "818463159793745930": "Дизайнер"
     };
 
-    function getUserCard(user) {
+    function setUserCard(user) {
         return fetch(`/api/v1/discord/users-by-bot/${user}`)
             .then(response => response.json())
             .then(commits => {
-                let staffAvatar = (commits.avatar);
-                let staffName = (commits.username);
+                let staffAvatar = commits.avatar;
+                let staffName = commits.username;
                 let staffCard = `
                     <div class="staff-card">
                         <div class="staff-image">
@@ -26,12 +26,13 @@ document.addEventListener("DOMContentLoaded", function () {
                             <p class="staff-description">${staffs[user]}</p>
                         </div>
                     </div>
-                `
-                staffContainers.innerHTML += staffCard
+                `;
+                return staffCard;
+            });
+    }
 
-        })
-    }
-    for (var user in staffs) {
-        getUserCard(user);
-    }
+    Promise.all(Object.keys(staffs).map(user => setUserCard(user)))
+        .then(cards => {
+            staffContainers.innerHTML += cards.join('');
+        });
 });

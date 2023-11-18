@@ -46,7 +46,6 @@ async def main_page(
         "index.html", prepare_request_for_template({"request": request}, db)
     )
 
-
 @api_router.get("/servers", response_class=HTMLResponse)
 async def shop_page(
     request: Request,
@@ -56,7 +55,6 @@ async def shop_page(
         "servers.html", prepare_request_for_template({"request": request}, db)
     )
 
-
 @api_router.get("/social", response_class=HTMLResponse)
 async def social_page(
     request: Request,
@@ -64,4 +62,13 @@ async def social_page(
 ):
     return templates.TemplateResponse(
         "social.html", prepare_request_for_template({"request": request}, db)
+    )
+
+@api_router.get("/shop", response_class=HTMLResponse)
+async def social_page(
+    request: Request,
+    db: Annotated[Session, Depends(deps.get_db)],
+):
+    return templates.TemplateResponse(
+        "shop.html", prepare_request_for_template({"request": request}, db)
     )

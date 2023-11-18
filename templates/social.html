@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 
-{% block links %}{% endblock %}
-{% block scripts %}{% endblock %}
+{% block links %}
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/social.css') }}">
+{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', path='/js/card-media.js') }}"></script>
+{% endblock %}
 {% block content %}
-    <section>
-        <p>Hello social</p>
+    <section class="project-media">
+        <h3>Медиа</h3>
+        <div class="media-container"></div>
     </section>
 {% endblock %}
