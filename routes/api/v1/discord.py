@@ -22,6 +22,7 @@ router = APIRouter(prefix="/discord", tags=["discord"])
 def auth_middleware(
     request: Request,
     db: Annotated[Session, Depends(deps.get_db)],
+    raise_err: bool = False,
 ) -> dict:
     cookies = request.cookies
 
@@ -31,6 +32,8 @@ def auth_middleware(
     discord_user = get_user(cookies.get("token_type"), cookies.get("access_token"))
 
     if not discord_user:
+        if raise_err:
+            raise HTTPException(401, "Not authorized.")
         return {}
 
     discord_user_id = discord_user.get("id")
@@ -120,7 +123,10 @@ def get_auth_callback(
 
         raise HTTPException(err.response.status_code, detail=resp_json)
 
-    auth_middleware(request, db)
+    auth_middleware(
+        request,
+        db,
+    )
 
     expires = cookies.pop("expires_in")
 
@@ -128,10 +134,7 @@ def get_auth_callback(
 
     for cookie in cookies.keys():
         resp.set_cookie(
-            cookie,
-            cookies.get(cookie),
-            expires=expires,
-            httponly=True,
+            cookie, cookies.get(cookie), expires=expires, httponly=True, path="/"
         )
 
     return resp

@@ -28,7 +28,7 @@ def prepare_request_for_template(resp_dict: dict, db: Session) -> dict:
                     f"https://cdn.discordapp.com/avatars/"
                     f"{user.get('id')}/{user.get('avatar')}.webp?size=64"
                 ),
-                "username": user.get('username')
+                "username": user.get("username"),
             }
         )
 
@@ -46,6 +46,7 @@ async def main_page(
         "index.html", prepare_request_for_template({"request": request}, db)
     )
 
+
 @api_router.get("/servers", response_class=HTMLResponse)
 async def shop_page(
     request: Request,
@@ -54,6 +55,7 @@ async def shop_page(
     return templates.TemplateResponse(
         "servers.html", prepare_request_for_template({"request": request}, db)
     )
+
 
 @api_router.get("/social", response_class=HTMLResponse)
 async def social_page(
@@ -64,8 +66,9 @@ async def social_page(
         "social.html", prepare_request_for_template({"request": request}, db)
     )
 
+
 @api_router.get("/shop", response_class=HTMLResponse)
-async def social_page(
+async def shop_page(
     request: Request,
     db: Annotated[Session, Depends(deps.get_db)],
 ):

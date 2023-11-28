@@ -2,6 +2,8 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+from schemas import minecraft
+
 
 # class DiscordError(BaseModel):
 #     message: str
