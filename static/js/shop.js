@@ -1,3 +1,16 @@
+function saveData(data) {
+  var jsonString = JSON.stringify(data);
+
+  localStorage.setItem('myData', jsonString);
+}
+
+function getData() {
+  var jsonString = localStorage.getItem('myData');
+  var data = JSON.parse(jsonString);
+
+  return data;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     var productsContainer = document.querySelector(".products-container");
 
@@ -9,15 +22,28 @@ document.addEventListener("DOMContentLoaded", function () {
                     let productСontainer = `
                         <div class="product-container">
                             <div class="product-image">
-                                <img src="/static/image/test.png" alt="Product">
+                                <img src="/static/image/test.png" alt="Product image">
                             </div>
                             <p>${commits[i]['name']}</p>
-                            <button>Купить за ${commits[i]['price']}</button>
+                            <button class="product-button" id="${commits[i]['id']}">Купить за ${commits[i]['price']}</button>
                         </div>
                     `
-                    productsContainer.innerHTML += productСontainer
+                    productsContainer.innerHTML += productСontainer;
                 }
         })
     }
     setProducts();
+
+    productsContainer.addEventListener('click', function (event) {
+        if (event.target.classList.contains('product-button')) {
+            var id = +event.target.id;
+            var data = getData() || [];
+
+            if (!data.includes(id)) {
+                data.push(id);
+
+                saveData(data);
+            }
+        }
+    });
 });
