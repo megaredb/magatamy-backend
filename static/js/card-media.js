@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         "1112736860221997076": {
             "description": "",
-            "socials": {
+            "socials": {    
                 "youtube": "https://www.youtube.com/@gromlastday"
             }
         },
