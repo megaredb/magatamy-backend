@@ -157,6 +157,14 @@ body {
     font-size: 48px;
 }
 
+.trash-image {
+    transition: transform 0.2s ease-in-out;
+}
+
+#pulseEffect {
+    transform: scale(1.4);
+}
+
 @media only screen and (max-width: 1310px) {
     .header-container {
         padding: 20px;

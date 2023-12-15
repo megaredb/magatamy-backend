@@ -13,6 +13,7 @@ function getData() {
 
 document.addEventListener("DOMContentLoaded", function () {
     var productsContainer = document.querySelector(".products-container");
+    var trashImage = document.querySelector(".trash-image");
 
     function setProducts(user) {
         return fetch(`/api/v1/products`)
@@ -43,6 +44,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 data.push(id);
 
                 saveData(data);
+
+                trashImage.setAttribute('id', 'pulseEffect');
+                setTimeout(() => {
+                    trashImage.removeAttribute('id');
+                }, 200);
             }
         }
     });
