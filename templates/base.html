@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="{{ url_for('static', path='/css/null.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', path='/css/header.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', path='/css/footer.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', path='/css/form.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', path='/css/trash.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', path='/css/base.css') }}">
         {% block links %}{% endblock %}
@@ -59,6 +60,9 @@
         </div>
         <div class="header-items-container">
             {{ items() }}
+        </div>
+        <div class="form-container" style="display: none;">
+            <div class="form"></div>
         </div>
         <div class="trash-container" style="display: none;">
             <div class="trash">

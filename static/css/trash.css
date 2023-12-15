@@ -98,7 +98,6 @@
 .trash-form input {
     border-radius: 16px;
     outline: none;
-    border: none;
     padding: 2% 4%;
     margin-bottom: 18px;
     width: 100%;
@@ -116,7 +115,6 @@
     height: 100%;
     width: 100%;
     background-color: var(--white);
-    border: none;
     border-radius: 16px;
     cursor: pointer;
 }

@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     var header = document.querySelector('.header');
     var trash = document.querySelector('.trash-container');
+    var form = document.querySelector('.form-container');
     var image = document.querySelector('.header-items-menu');
     var itemsСontainer = document.querySelector('.header-items-container');
     var firstSection = document.querySelector('section');
@@ -11,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         firstSection.style.paddingTop = header.offsetHeight + 'px';
         itemsСontainer.style.paddingTop = header.offsetHeight + 'px';
         trash.style.marginTop = header.offsetHeight + 'px';
+        form.style.marginTop = header.offsetHeight + 'px';
     }
     setPadding()
 

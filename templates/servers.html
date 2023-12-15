@@ -3,19 +3,19 @@
 {% block links %}
     <link rel="stylesheet" href="{{ url_for('static', path='/css/servers.css') }}">
 {% endblock %}
-{% block scripts %}{% endblock %}
+{% block scripts %}
+        <script src="{{ url_for('static', path='/js/form.js') }}"></script>
+{% endblock %}
 {% block content %}
     <section class="server-request-container">
         <div class="server-request">
-            <h3>Magatamy begemot</h3>
+            <h3>Magatamy vanilla</h3>
             <div class="server-image">
                 <img src="{{ url_for('static', path='/image/test2.png') }}" alt="Server Image">
             </div>
             <p class="server-description">Тут типо описание сервера</p>
             <div class="server-request-navigation">
-                <a href="#">
-                    <button>Подать заявку</button>
-                </a>
+                <button class="button-vanilla">Подать заявку</button>
                 <div class="server-request-players">
                     <p>0</p>
                     <div>
@@ -25,14 +25,14 @@
             </div>
         </div>
         <div class="server-request">
-            <h3>Magatamy main</h3>
+            <h3>Magatamy vanilla+</h3>
             <div class="server-image">
                 <img src="{{ url_for('static', path='/image/test2.png') }}" alt="Server Image">
             </div>
             <p class="server-description">Тут типо описание сервера</p>
             <div class="server-request-navigation">
                 <a href="#">
-                    <button>Подать заявку</button>
+                    <button class="button-vanilla-plus">Подать заявку</button>
                 </a>
                 <div class="server-request-players">
                     <p>0</p>
