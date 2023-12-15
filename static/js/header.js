@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function setPadding() {
         firstSection.style.paddingTop = header.offsetHeight + 'px';
         itemsСontainer.style.paddingTop = header.offsetHeight + 'px';
-        trash.style.paddingTop = header.offsetHeight + 'px';
+        trash.style.marginTop = header.offsetHeight + 'px';
     }
     setPadding()
 

@@ -198,7 +198,7 @@ body {
         display: block;
     }
 }
-@media only screen and (max-width: 575px) {
+@media only screen and (max-width: 630px) {
     .header-logo a {
         display: none;
     }
