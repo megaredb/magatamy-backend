@@ -50,26 +50,27 @@ h3 {
 
 .info-container .info-content {
     width: 65%;
-    padding: 10px;
+    padding: 10px
 }
 
 .info-container .info-content h2 {
     font-size: 34px;
+    padding-bottom: 10px;
 }
 
 .info-container .info-content p {
     font-size: 20px;
-    padding-top: 10px
 }
 
 .info-content div  {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: right;
 }
 
 .info-content a {
     display: inline-block;
+    padding: 10px;
 }
 
 .info-content button  {
@@ -94,18 +95,21 @@ h3 {
 {
     width: 100%;
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
+    justify-content: space-around;
 }
+
 .project-features-box {
     background-color: var(--grey);
     border-radius: 10px;
     flex-basis: calc(33.33% - 20px);
     margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(var(--black), 0.4);
 }
 
-.project-features-box .box-text {
-    height: 100%;
+.project-features-box .box-name {
+    padding-bottom: 10px;
 }
 
 .staff-container {
@@ -175,6 +179,7 @@ h3 {
     .info-container .info-content p {
         font-size: 22px;
     }
+
 }
 
 @media only screen and (max-width: 930px) {
@@ -193,4 +198,20 @@ h3 {
         overflow: hidden;
         margin: 20px 0;
     }
+
+    .info-content div  {
+        justify-content: center;
+    }
+
+    .project-features-box {
+        flex-basis: 100%;
+    }
+
+    .project-features-box .box-name {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 10px;
+    }
+
 }
