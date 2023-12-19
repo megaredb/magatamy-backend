@@ -32,6 +32,12 @@ document.addEventListener("DOMContentLoaded", function () {
             "socials": {
                 "youtube": "https://www.youtube.com/@Luriking"
             }
+        },
+        "763837225199861772": {
+            "description": "Просто верный Джо",
+            "socials": {
+                "youtube": "https://www.youtube.com/@The-Joseph"
+            }
         }
     };
 
