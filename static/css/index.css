@@ -62,7 +62,7 @@ h3 {
     font-size: 20px;
 }
 
-.info-content div  {
+.info-content .button  {
     width: 100%;
     display: flex;
     justify-content: right;
@@ -199,7 +199,7 @@ h3 {
         margin: 20px 0;
     }
 
-    .info-content div  {
+    .info-content .button  {
         justify-content: center;
     }
 

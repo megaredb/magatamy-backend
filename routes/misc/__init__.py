@@ -75,3 +75,13 @@ async def shop_page(
     return templates.TemplateResponse(
         "shop.html", prepare_request_for_template({"request": request}, db)
     )
+
+
+@api_router.get("/admin", response_class=HTMLResponse)
+async def main_page(
+    request: Request,
+    db: Annotated[Session, Depends(deps.get_db)],
+):
+    return templates.TemplateResponse(
+        "admin.html", prepare_request_for_template({"request": request}, db)
+    )
