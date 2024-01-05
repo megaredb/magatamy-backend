@@ -5,7 +5,7 @@ from utils import config
 
 
 HEADERS = {"Content-Type": "application/x-www-form-urlencoded"}
-SCOPES = "identify"
+SCOPES = "identify guilds.members.read"
 
 
 def exchange_code(code: str) -> dict:

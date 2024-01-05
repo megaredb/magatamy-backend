@@ -15,9 +15,6 @@ router = APIRouter(prefix="/minecraft", tags=["minecraft"])
     response_model=schemas.MCUserData,
 )
 def get_money(discord_user: Annotated[dict, Depends(auth_middleware)]):
-    if not discord_user:
-        raise HTTPException(401, "Not authorized.")
-
     username = str(discord_user.get("username"))
 
     resp = get(

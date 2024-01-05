@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(commits => {
                 let mediaAvatar = (commits.avatar);
-                let mediaName = (commits.username);
+                let mediaName = (commits.nick);
                 let mediaCard = `
                     <div class="media-card">
                         <div class="media-image">

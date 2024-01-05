@@ -5,6 +5,8 @@ from pydantic import BaseModel
 
 class ProductBase(BaseModel):
     name: str
+    description: str
+    image: Optional[str] = None
     price: float
 
 
@@ -26,7 +28,7 @@ class ProductInDBBase(ProductBase):
 
 
 class Product(ProductInDBBase):
-    pass
+    command: Optional[str] = None
 
 
 class ProductInDB(ProductInDBBase):

@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from starlette.requests import Request
 from starlette.responses import HTMLResponse
@@ -8,27 +8,34 @@ from starlette.templating import Jinja2Templates
 
 from routes.api import deps
 from routes.api.v1.discord import auth_middleware
+from routes.api.v1.discord.auth import only_moderator
+from schemas import DiscordGuildMember
 
 api_router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
-def prepare_request_for_template(resp_dict: dict, db: Session) -> dict:
+async def prepare_request_for_template(resp_dict: dict, db: Session) -> dict:
     result = resp_dict
     request: Request = resp_dict.get("request")
 
     authorized = False
 
-    if user := auth_middleware(request, db):
+    try:
+        guild_member = await auth_middleware(request, db)
+    except HTTPException:
+        guild_member = None
+
+    if guild_member:
         authorized = True
 
         result.update(
             {
                 "avatar_url": (
                     f"https://cdn.discordapp.com/avatars/"
-                    f"{user.get('id')}/{user.get('avatar')}.webp?size=64"
+                    f"{guild_member.user.id}/{guild_member.avatar}.webp?size=64"
                 ),
-                "username": user.get("username"),
+                "username": guild_member.nick,
             }
         )
 
@@ -43,17 +50,17 @@ async def main_page(
     db: Annotated[Session, Depends(deps.get_db)],
 ):
     return templates.TemplateResponse(
-        "index.html", prepare_request_for_template({"request": request}, db)
+        "index.html", await prepare_request_for_template({"request": request}, db)
     )
 
 
 @api_router.get("/servers", response_class=HTMLResponse)
-async def shop_page(
+async def servers_page(
     request: Request,
     db: Annotated[Session, Depends(deps.get_db)],
 ):
     return templates.TemplateResponse(
-        "servers.html", prepare_request_for_template({"request": request}, db)
+        "servers.html", await prepare_request_for_template({"request": request}, db)
     )
 
 
@@ -63,7 +70,7 @@ async def social_page(
     db: Annotated[Session, Depends(deps.get_db)],
 ):
     return templates.TemplateResponse(
-        "social.html", prepare_request_for_template({"request": request}, db)
+        "social.html", await prepare_request_for_template({"request": request}, db)
     )
 
 
@@ -73,15 +80,16 @@ async def shop_page(
     db: Annotated[Session, Depends(deps.get_db)],
 ):
     return templates.TemplateResponse(
-        "shop.html", prepare_request_for_template({"request": request}, db)
+        "shop.html", await prepare_request_for_template({"request": request}, db)
     )
 
 
 @api_router.get("/admin", response_class=HTMLResponse)
-async def main_page(
+async def admin_page(
     request: Request,
     db: Annotated[Session, Depends(deps.get_db)],
+    _deps: Annotated[DiscordGuildMember, Depends(only_moderator)],
 ):
     return templates.TemplateResponse(
-        "admin.html", prepare_request_for_template({"request": request}, db)
+        "admin.html", await prepare_request_for_template({"request": request}, db)
     )

@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(commits => {
                 let staffAvatar = commits.avatar;
-                let staffName = commits.username;
+                let staffName = commits.nick;
                 let staffCard = `
                     <div class="staff-card">
                         <div class="staff-image">

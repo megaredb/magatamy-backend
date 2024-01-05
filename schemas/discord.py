@@ -1,13 +1,8 @@
-from typing import Optional
-
+from typing import Optional, List
 from pydantic import BaseModel
 
-from schemas import minecraft
-
-
-# class DiscordError(BaseModel):
-#     message: str
-#     code: int
+from utils import config
+from utils.config import DISCORD_ADMIN_ROLE_ID, DISCORD_MODERATOR_ROLE_ID
 
 
 class DiscordUser(BaseModel):
@@ -21,3 +16,16 @@ class DiscordUser(BaseModel):
     accent_color: Optional[int] = None
     premium_type: int
     public_flags: int
+
+
+class DiscordGuildMember(BaseModel):
+    user: Optional[DiscordUser] = None
+    nick: Optional[str] = None
+    avatar: Optional[str] = None
+    roles: List[str]
+
+    def is_moderator(self):
+        return self.is_admin() or DISCORD_MODERATOR_ROLE_ID in self.roles
+
+    def is_admin(self):
+        return self.user.id in config.ADMINS or DISCORD_ADMIN_ROLE_ID in self.roles
