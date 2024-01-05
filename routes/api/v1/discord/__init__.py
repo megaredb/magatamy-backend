@@ -93,7 +93,10 @@ async def get_auth_callback(
 
         raise HTTPException(err.response.status_code, detail=resp_json)
 
-    await auth_middleware(request, db)
+    try:
+        await auth_middleware(request, db)
+    except HTTPException:
+        pass
 
     expires = cookies.pop("expires_in")
 
