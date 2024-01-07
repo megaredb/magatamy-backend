@@ -9,7 +9,7 @@ from models import Ticket
 from routes.api import deps
 from routes.api.v1.discord.auth import auth_middleware, only_moderator
 from routes.api.v1.ticket import form, question
-from schemas import TicketCreate
+from schemas import TicketCreate, TicketUpdate
 from utils.ticket import TicketStatus
 
 router = APIRouter(prefix="/tickets", tags=["tickets"])
@@ -42,18 +42,25 @@ async def read_own_tickets(
 
 
 @router.get("/", response_model=List[schemas.ticket.Ticket])
-async def read_opened_tickets(
+async def read_tickets(
     db: Annotated[Session, Depends(deps.get_db)],
     _deps: Annotated[schemas.DiscordGuildMember, Depends(only_moderator)],
+    ticket_status: TicketStatus = TicketStatus.OPEN,
     skip: int = 0,
     limit: int = 100,
 ):
     """
-    Read opened tickets.
+    Read tickets.
     """
 
+    if limit > 1000:
+        limit = 1000
+
     tickets = crud.ticket.get_multi(
-        db=db, skip=skip, limit=limit, custom_expr=(Ticket.status == TicketStatus.OPEN)
+        db=db,
+        skip=skip,
+        limit=limit,
+        custom_expr=(Ticket.status == ticket_status.value),
     )
 
     tickets_schemas = []
@@ -65,6 +72,26 @@ async def read_opened_tickets(
         tickets_schemas.append(ticket_schema)
 
     return tickets_schemas
+
+
+@router.patch("/{ticket_id}", response_model=schemas.ticket.Ticket)
+async def update_ticket(
+    db: Annotated[Session, Depends(deps.get_db)],
+    guild_member: Annotated[schemas.DiscordGuildMember, Depends(only_moderator)],
+    ticket_id: int,
+    ticket_in: TicketUpdate,
+):
+    ticket = crud.ticket.get(db=db, _id=ticket_id)
+
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ticket not found")
+
+    if ticket.status != TicketStatus.OPEN and not guild_member.is_admin():
+        raise HTTPException(
+            status_code=409, detail="Moderators can't change already processed tickets."
+        )
+
+    return crud.form.update(db=db, db_obj=ticket, obj_in=ticket_in)
 
 
 @router.post("/", response_model=schemas.ticket.Ticket)

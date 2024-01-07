@@ -2,7 +2,7 @@ from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
-from sqlalchemy import select, delete
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import ColumnExpressionArgument
 
@@ -40,13 +40,14 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db: Session,
         *,
         custom_expr: ColumnExpressionArgument[bool] = None,
+        order_by: ColumnExpressionArgument[Any] = None,
         skip: int = 0,
         limit: int = 100
     ) -> List[ModelType]:
-        stmt = select(self.model).offset(skip).limit(limit)
+        stmt = select(self.model).order_by(order_by).offset(skip).limit(limit)
 
-        if custom_expr:
-            stmt = stmt.where(*custom_expr)
+        if custom_expr is not None:
+            stmt = stmt.where(custom_expr)
 
         return [i for i in db.execute(stmt).scalars().all()]
 
