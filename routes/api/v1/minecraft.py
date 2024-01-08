@@ -5,6 +5,7 @@ from httpx import get
 
 import schemas
 from routes.api.v1.discord import auth_middleware
+from schemas import DiscordGuildMember
 from utils import config
 
 router = APIRouter(prefix="/minecraft", tags=["minecraft"])
@@ -14,8 +15,8 @@ router = APIRouter(prefix="/minecraft", tags=["minecraft"])
     "/money",
     response_model=schemas.MCUserData,
 )
-def get_money(discord_user: Annotated[dict, Depends(auth_middleware)]):
-    username = str(discord_user.get("username"))
+def get_money(discord_user: Annotated[DiscordGuildMember, Depends(auth_middleware)]):
+    username = str(discord_user.nick)
 
     resp = get(
         "%s/money/%s" % (config.MAIN_MC_SERVER_HOST, username),
