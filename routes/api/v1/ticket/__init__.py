@@ -88,7 +88,7 @@ async def update_ticket(
 
     if ticket.status != TicketStatus.OPEN and not guild_member.is_admin():
         raise HTTPException(
-            status_code=409, detail="Moderators can't change already processed tickets."
+            status_code=401, detail="Moderators can't change already processed tickets."
         )
 
     return crud.form.update(db=db, db_obj=ticket, obj_in=ticket_in)
