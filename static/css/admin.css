@@ -67,7 +67,11 @@
 .right-container .text {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    width: 100%
+}
+
+.right-container .text .text-colum-left{
+    width: 40%
 }
 
 .question-item{
@@ -81,7 +85,8 @@
 }
 
 .request .ava-img {
-    width: 10%;
+    width: 20%;
+    height: auto;
 }
 
 .request .ava-img  img{
@@ -93,8 +98,54 @@
     margin: 0 auto;
 }
 
+
+.request .buttons {
+    margin: 50px 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.request .buttons a button {
+    font-size: 18px;
+    color: var(--white);
+    background-color: var(--grey-light);
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    transition: background-color 0.3s; /* добавляем плавный переход для изменения фона */
+}
+
 .request .right-container {
-    width: 90%;
+    width: 80%;
+}
+
+@media only screen and (max-width: 1000px) {
+    .request-container .request {
+        flex-direction: column-reverse;
+    }
+
+    .request .ava-img img {
+        display: none;
+    }
+
+    .request .right-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .right-container .text {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .request .buttons {
+        min-width: 200px;
+        width: auto;
+    }
 }
 
 
