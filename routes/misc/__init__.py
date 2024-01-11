@@ -93,3 +93,23 @@ async def admin_page(
     return templates.TemplateResponse(
         "admin.html", await prepare_request_for_template({"request": request}, db)
     )
+
+
+@api_router.get("/agreement", response_class=HTMLResponse)
+async def agreement_page(
+    request: Request,
+    db: Annotated[Session, Depends(deps.get_db)]
+):
+    return templates.TemplateResponse(
+        "agreement.html", await prepare_request_for_template({"request": request}, db)
+    )
+
+
+@api_router.get("/policy", response_class=HTMLResponse)
+async def policy_page(
+    request: Request,
+    db: Annotated[Session, Depends(deps.get_db)]
+):
+    return templates.TemplateResponse(
+        "policy.html", await prepare_request_for_template({"request": request}, db)
+    )
