@@ -1,10 +1,12 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
-from httpx import get
+from httpx import get, post, delete
+from starlette.responses import Response
 
 import schemas
 from routes.api.v1.discord import auth_middleware
+from routes.api.v1.discord.auth import only_moderator
 from schemas import DiscordGuildMember
 from utils import config
 
@@ -47,3 +49,37 @@ def get_online_count():
     online_data = schemas.MCOnline(count=resp.json().get("count"))
 
     return online_data
+
+
+@router.post(
+    "/whitelist/{username}",
+)
+def post_to_whitelist(
+    username: str, _deps: Annotated[DiscordGuildMember, Depends(only_moderator)]
+):
+    resp = post(
+        "%s/whitelist/%s" % (config.MAIN_MC_SERVER_HOST, username),
+        headers={"Authorization": config.MC_SERVER_KEY},
+    )
+
+    if resp.status_code != 200:
+        raise HTTPException(400)
+
+    return Response()
+
+
+@router.delete(
+    "/whitelist/{username}",
+)
+def remove_from_whitelist(
+    username: str, _deps: Annotated[DiscordGuildMember, Depends(only_moderator)]
+):
+    resp = delete(
+        "%s/whitelist/%s" % (config.MAIN_MC_SERVER_HOST, username),
+        headers={"Authorization": config.MC_SERVER_KEY},
+    )
+
+    if resp.status_code != 200:
+        raise HTTPException(400)
+
+    return Response()
