@@ -17,11 +17,10 @@
 
 .footer-blocks p {
     font-size: 16px;
-    padding-top: 12px;
+    padding-top: 6px;
 }
 
 .footer-icons img {
-  width: 30px;
   height: 30px;
   object-fit: cover;
 }

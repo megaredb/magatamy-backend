@@ -6,9 +6,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var formСontainer = document.querySelector('.form-container');
 
     function setProducts(idForm) {
-        return fetch(`/api/v1/tickets/forms`)
+        return fetch(`/api/v1/tickets/forms/`)
             .then(response => response.json())
             .then(commits => {
+                console.log(commits);
                 var commit = commits[idForm];
                 commit.questions.sort((a, b) => a.position - b.position);
                 form.innerHTML = '';

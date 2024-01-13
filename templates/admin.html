@@ -4,69 +4,12 @@
     <link rel="stylesheet" href="{{ url_for('static', path='/css/admin.css') }}">
 {% endblock %}
 {% block scripts %}
+    <script src="{{ url_for('static', path='/js/admin.js') }}"></script>
 {% endblock %}
 {% block content %}
     <section class="admin-buttons">
-        <div class="header-buttons">
-            <div class="buttons">
-                <a href="/admin"><button>Принять заявки</button></a>
-                <a href="/admin"><button>Важные Ссылки</button></a>
-                <a href="/admin"><button>База Данных</button></a>
-            </div>
-        </div>
     </section>
     <section class="request-panel">
-        <div class="request-container">
-            <div class="request">
-                <div class="ava-img">
-                    <img src="{{ url_for('static', path='/image/vanilla-plus.png') }}" alt="">
-                    <div class="buttons">
-                        <a href="/admin"><button>V</button></a>
-                        <a href="/admin"><button>X</button></a>
-                    </div>
-                </div>
-                <div class="right-container">
-                    <div class="top">
-                        <h1>Заявка - Ник</h1>
-                    </div>
-                    <div class="text">
-                        <div class ="text-colum-left">
-                            <div class="question-item">
-                                <h3 onclick="toggleAnswer(this)">ID - Игрока </h3>
-                                <p>899940294571728936</p>
-                            </div>
-                            <div class="question-item">
-                                <h3 onclick="toggleAnswer(this)">Ник в Майнкрафте</h3>
-                                <p>Nervolintik</p>
-                            </div>
-                            <div class="question-item">
-                                <h3 onclick="toggleAnswer(this)">Возраст</h3>
-                                <p>17 лет</p>
-                            </div>
-                            <div class="question-item">
-                                <h3 onclick="toggleAnswer(this)">Командный игрок?</h3>
-                                <p>и в одиночку и с кем-то, все ровно.</p>
-                            </div>
-                            <div class="question-item">
-                                <h3 onclick="toggleAnswer(this)">Прочитал ли он правила?</h3>
-                                <p>Да</p>
-                            </div>
-
-                        </div>
-                        <div class ="text-colum-right">
-                            <div class="question-item">
-                                <h3 onclick="toggleAnswer(this)">Описание</h3>
-                                <p>Не много впыльчив могу реско начать с кем ругатся просто потомучто он с кем то как те неуважительно общяется</p>
-                            </div>
-                            <div class="question-item">
-                                <h3 onclick="toggleAnswer(this)">Опыт игры</h3>
-                                <p>Более 5 серверов</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="request-container"></div>
     </section>
-
 {% endblock %}

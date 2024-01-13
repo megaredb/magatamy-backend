@@ -9,12 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 "twitch": "https://www.twitch.tv/megabytey"
             }
         },
-        "942492732797108244": {
-            "description": "",
-            "socials": {
-                "youtube": "https://www.youtube.com/@xoxmach871"
-            }
-        },
         "1112736860221997076": {
             "description": "",
             "socials": {    
@@ -24,19 +18,55 @@ document.addEventListener("DOMContentLoaded", function () {
         "1114198957581664306": {
             "description": "",
             "socials": {
-                "youtube": "https://www.youtube.com/@barsykEvgeny"
-            }
-        },
-        "677193639423639553": {
-            "description": "",
-            "socials": {
-                "youtube": "https://www.youtube.com/@Luriking"
+                "youtube": "https://www.youtube.com/@Spa_wnMAGATAMY"
             }
         },
         "763837225199861772": {
             "description": "Просто верный Джо",
             "socials": {
                 "youtube": "https://www.youtube.com/@The-Joseph"
+            }
+        },
+        "269542487998201857": {
+            "description": "",
+            "socials": {
+                "youtube": "https://youtube.com/@AGK_Nagibeter"
+            }
+        },
+        "573080435102449664": {
+            "description": "",
+            "socials": {
+                "youtube": "https://youtube.com/@ender105"
+            }
+        },
+        "1124958266015887421": {
+            "description": "",
+            "socials": {
+                "youtube": "https://www.youtube.com/@frankostvol"
+            }
+        },
+        "1037288672418091038": {
+            "description": "",
+            "socials": {
+                "youtube": "https://www.youtube.com/@HorusChannelYT"
+            }
+        },
+        "1069937338026827796": {
+            "description": "",
+            "socials": {
+                "youtube": "https://www.youtube.com/@Nirte4ek_Minecraft"
+            }
+        },
+        "705315583323013182": {
+            "description": "",
+            "socials": {
+                "youtube": "https://www.youtube.com/@Chokopick"
+            }
+        },
+        "946370462793990214": {
+            "description": "",
+            "socials": {
+                "youtube": "https://www.youtube.com/@cherepok_03"
             }
         }
     };
