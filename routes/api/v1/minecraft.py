@@ -9,19 +9,24 @@ from routes.api.v1.discord import auth_middleware
 from routes.api.v1.discord.auth import only_moderator
 from schemas import DiscordGuildMember
 from utils import config
+from utils.minecraft import ServerEnum, SERVERS
 
 router = APIRouter(prefix="/minecraft", tags=["minecraft"])
 
 
 @router.get(
-    "/money",
+    "/{server}/money",
     response_model=schemas.MCUserData,
 )
-def get_money(discord_user: Annotated[DiscordGuildMember, Depends(auth_middleware)]):
+def get_money(
+    server: ServerEnum,
+    discord_user: Annotated[DiscordGuildMember, Depends(auth_middleware)],
+):
     username = str(discord_user.nick)
+    server_host = SERVERS[server]
 
     resp = get(
-        "%s/money/%s" % (config.MAIN_MC_SERVER_HOST, username),
+        "%s/money/%s" % (server_host, username),
         headers={"Authorization": config.MC_SERVER_KEY},
     )
 
@@ -34,12 +39,16 @@ def get_money(discord_user: Annotated[DiscordGuildMember, Depends(auth_middlewar
 
 
 @router.get(
-    "/online",
+    "/{server}/online",
     response_model=schemas.MCOnline,
 )
-def get_online_count():
+def get_online_count(
+    server: ServerEnum,
+):
+    server_host = SERVERS[server]
+
     resp = get(
-        "%s/online" % config.MAIN_MC_SERVER_HOST,
+        "%s/online" % server_host,
         headers={"Authorization": config.MC_SERVER_KEY},
     )
 
@@ -52,13 +61,17 @@ def get_online_count():
 
 
 @router.post(
-    "/whitelist/{username}",
+    "/{server}/whitelist/{username}",
 )
 def post_to_whitelist(
-    username: str, _deps: Annotated[DiscordGuildMember, Depends(only_moderator)]
+    server: ServerEnum,
+    username: str,
+    _deps: Annotated[DiscordGuildMember, Depends(only_moderator)],
 ):
+    server_host = SERVERS[server]
+
     resp = post(
-        "%s/whitelist/%s" % (config.MAIN_MC_SERVER_HOST, username),
+        "%s/whitelist/%s" % (server_host, username),
         headers={"Authorization": config.MC_SERVER_KEY},
     )
 
@@ -69,13 +82,17 @@ def post_to_whitelist(
 
 
 @router.delete(
-    "/whitelist/{username}",
+    "/{server}/whitelist/{username}",
 )
 def remove_from_whitelist(
-    username: str, _deps: Annotated[DiscordGuildMember, Depends(only_moderator)]
+    server: ServerEnum,
+    username: str,
+    _deps: Annotated[DiscordGuildMember, Depends(only_moderator)],
 ):
+    server_host = SERVERS[server]
+
     resp = delete(
-        "%s/whitelist/%s" % (config.MAIN_MC_SERVER_HOST, username),
+        "%s/whitelist/%s" % (server_host, username),
         headers={"Authorization": config.MC_SERVER_KEY},
     )
 
