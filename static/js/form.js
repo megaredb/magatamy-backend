@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <button class="form-button">Отменить</button>
                                 <button class="form-button">ОК</button>
                             </div>
-                            <p style="text-align: center; padding-bottom: 16px; color: red;">Вы не вошли в дс!</p>
+                            <p style="text-align: center; padding-bottom: 16px; color: red;">Вы не вошли в Discord!</p>
                         </div>
                     `
                 }
