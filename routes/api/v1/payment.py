@@ -71,8 +71,6 @@ def create_payment_url(
 
     headers = {"x-api-key": config.ENOT_API_KEY}
 
-    amount = 1
-
     data = {
         "amount": amount,
         "order_id": str(uuid.uuid4()),
@@ -83,8 +81,6 @@ def create_payment_url(
             "guild_member_id": guild_member.user.id,
         },
     }
-
-    print(data)
 
     enot_resp: HTTPXResponse
 

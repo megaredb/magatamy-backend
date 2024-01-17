@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   forms = commits;
 
                   setRequests()
-//                  setInterval(setRequests, 2000);
+                  setInterval(setRequests, 2000);
         })
     }
 
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
 
-                    var imgSrc = (formId === 1) ? "static/image/vanilla.png" : "static/image/vanilla-plus.png";
+                    var imgSrc = (formId === 2) ? "static/image/vanilla.png" : "static/image/vanilla-plus.png";
 
                     for (var i = 0; i < answersAll.length; i++) {
                         if (formAnswers[i]['title'] === "Ник") var username = answersAll[i]['text_value'];
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener('click', function (event) {
         if (event.target.classList.contains('request-button-v')) {
             var data = event.target.classList[1].split("-");
-            var server = (data[0] == 1) ? "vanilla" : "vanilla-plus";
+            var server = (data[0] == 2) ? "vanilla" : "vanilla-plus";
             var username = data[1];
 
             var postData = {

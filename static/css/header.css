@@ -162,7 +162,7 @@ body {
 }
 
 #pulseEffect {
-    transform: scale(1.4);
+    transform: scale(3);
 }
 
 @media only screen and (max-width: 1310px) {

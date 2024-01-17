@@ -68,4 +68,4 @@ def delete_product(
     product = crud.product.get(db, product_id)
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
-    return crud.product.remove(db=db, id=product_id)
+    return crud.product.remove(db=db, _id=product_id)

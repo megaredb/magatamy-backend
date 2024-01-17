@@ -35,20 +35,20 @@ document.addEventListener("DOMContentLoaded", function () {
                                         <img class="trash-product-trash" id="${currentId}" src="/static/image/trash-bin.png" alt="Trash image">
                                     </div>
                                     <div class="trash-product-info">
-                                        <p>${commits[i]['name']}а</p>
-                                        <p>цена: ${commits[i]['price']}$</p>
+                                        <p>${commits[i]['name']}</p>
+                                        <p>цена: ${commits[i]['price']} руб.</p>
                                     </div>
                                     <div class="trash-product-arrow">
                                         <img class="trash-product-arrow-image" src="/static/image/arrow.png" alt="Description">
                                     </div>
                                 </div>
                                 <div class="trash-product-description">
-                                    <p>Ну тут типо описание товара, оно очень интересное и можно почитать что бы понимать на что деньги можно потратить, ну короче круто.</p>
+                                    <p>${commits[i]['description']}</p>
                                 </div>
                             </div>
                         `
                         allPrice += commits[i]['price'];
-                        button.innerText = `Оплатить ${allPrice}$`;
+                        button.innerText = `Оплатить ${allPrice} руб.`;
                         trashProducts.innerHTML += trashProduct;
                     }
                 }
@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 saveData(data);
                 setProducts();
+                button.innerText = `Оплатить 0 руб.`;
             }
         }
     });
@@ -89,6 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.addEventListener('click', function (event) {
         var trashArrowImage = event.target.closest('.trash-product-arrow-image');
+        var button = event.target.closest('.trash-button');
 
         if (trashArrowImage) {
             var trashProduct = trashArrowImage.closest('.trash-product');
@@ -99,6 +101,37 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 trashProduct.style.height = '100px';
                 trashArrowImage.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        if (button) {
+            var data = getData();
+            const hasRequestBody = Array.isArray(data) && data.length > 0;
+
+            if (hasRequestBody) {
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                };
+
+                fetch("/api/v1/payment/payment-url", options)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (!data.error && data.data.url) {
+                            window.open(data.data.url, '_blank');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                });
             }
         }
     });

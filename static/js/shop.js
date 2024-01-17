@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <img src="/static/image/test.png" alt="Product image">
                             </div>
                             <p>${commits[i]['name']}</p>
-                            <button class="product-button" id="${commits[i]['id']}">Купить за ${commits[i]['price']}</button>
+                            <button class="product-button" id="${commits[i]['id']}">Купить за ${commits[i]['price']} руб.</button>
                         </div>
                     `
                     productsContainer.innerHTML += productСontainer;

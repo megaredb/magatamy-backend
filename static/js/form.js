@@ -9,30 +9,65 @@ document.addEventListener("DOMContentLoaded", function () {
         return fetch(`/api/v1/tickets/forms/`)
             .then(response => response.json())
             .then(commits => {
-                console.log(commits);
-                var commit = commits[idForm];
-                commit.questions.sort((a, b) => a.position - b.position);
                 form.innerHTML = '';
-                var forms = '';
-                for (var i = 0; i < commit.questions.length; i++) {
-                    forms += `
-                        <p class="form-question" id="${commit.questions[i].id}" data-question-id="${commit.questions[i].id}">${commit.questions[i].description}</p>
-                        <textarea placeholder="Введите текст" id="${commit.questions[i].id}" data-question-id="${commit.questions[i].id}"></textarea>
-                    `
-                  }
+                let formContent = '';
+                if (!commits.detail)
+                {
+                    var commit = commits[idForm];
 
-                let formContent = `
-                    <div class="form-content">
-                        <div class="form-button">
-                            <button class="form-button">Отменить</button>
-                            <button class="form-button form-button-ok" id="${commit['id']}">Подать заявку</button>
+                    var purchasable = commit['purchasable'];
+                    var has_access = commit['has_access'];
+
+                    if (purchasable && !has_access)
+                    {
+                        formContent = `
+                            <div class="form-content">
+                                <div class="form-button">
+                                    <button class="form-button">Отменить</button>
+                                    <button class="form-button">ОК</button>
+                                </div>
+                                <p style="text-align: center; padding-bottom: 16px; color: red;">У вас не приобретен товар!</p>
+                                <h2>${commit['name']}</h2>
+                            </div>
+                        `
+                    }
+                    else
+                    {
+                        commit.questions.sort((a, b) => a.position - b.position);
+                        var forms = '';
+                        for (var i = 0; i < commit.questions.length; i++) {
+                            forms += `
+                                <p class="form-question" id="${commit.questions[i].id}" data-question-id="${commit.questions[i].id}">${commit.questions[i].description}</p>
+                                <textarea placeholder="Введите текст" id="${commit.questions[i].id}" data-question-id="${commit.questions[i].id}"></textarea>
+                            `
+                          }
+
+                        formContent = `
+                            <div class="form-content">
+                                <div class="form-button">
+                                    <button class="form-button">Отменить</button>
+                                    <button class="form-button form-button-ok" id="${commit['id']}">Подать заявку</button>
+                                </div>
+                                <div>
+                                    ${forms}
+                                </div>
+                                <h2>${commit['name']}</h2>
+                            </div>
+                        `
+                    }
+                }
+                else
+                {
+                    formContent = `
+                        <div class="form-content">
+                            <div class="form-button">
+                                <button class="form-button">Отменить</button>
+                                <button class="form-button">ОК</button>
+                            </div>
+                            <p style="text-align: center; padding-bottom: 16px; color: red;">Вы не вошли в дс!</p>
                         </div>
-                        <div>
-                            ${forms}
-                        </div>
-                        <h2>${commit['name']}</h2>
-                    </div>
-                `
+                    `
+                }
                 form.innerHTML += formContent;
         })
     }
