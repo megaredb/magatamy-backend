@@ -2,12 +2,11 @@ from typing import List, Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from starlette.requests import Request
 
 import crud
 import schemas
 from routes.api import deps
-from routes.api.v1.discord.auth import auth_middleware, only_admin
+from routes.api.v1.discord.auth import only_admin
 from schemas import DiscordGuildMember
 
 router = APIRouter(prefix="/products", tags=["products"])
@@ -15,21 +14,13 @@ router = APIRouter(prefix="/products", tags=["products"])
 
 @router.get("/", response_model=List[schemas.Product])
 async def read_products(
-    request: Request,
     db: Annotated[Session, Depends(deps.get_db)],
 ):
     """
     Read all products.
     """
-    try:
-        discord_user = await auth_middleware(request, db)
-    except HTTPException:
-        discord_user = None
 
-    if not discord_user:
-        return []
-
-    return crud.product.get_multi(db=db, is_admin=discord_user.is_admin())
+    return crud.product.get_multi(db=db)
 
 
 @router.post("/", response_model=schemas.Product)

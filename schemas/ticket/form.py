@@ -1,10 +1,11 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 from schemas.ticket import question
 
 
 class FormBase(BaseModel):
     name: str
+    purchasable: bool = False
 
 
 class FormCreate(FormBase):
@@ -12,7 +13,8 @@ class FormCreate(FormBase):
 
 
 class FormUpdate(FormBase):
-    pass
+    name: Optional[str] = None
+    purchasable: Optional[bool] = None
 
 
 class FormInDBBase(FormCreate):
@@ -24,7 +26,7 @@ class FormInDBBase(FormCreate):
 
 
 class Form(FormInDBBase):
-    pass
+    has_access: Optional[bool] = True
 
 
 class FormInDB(FormInDBBase):

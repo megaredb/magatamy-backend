@@ -118,6 +118,23 @@ async def create_ticket(
     if last_ticket and TicketStatus(last_ticket.status) == TicketStatus.OPEN:
         raise HTTPException(400, "You already have an opened ticket.")
 
+    form_in = crud.form.get(db, ticket_in.form_id)
+    has_access = not form_in.purchasable
+
+    if not has_access:
+        for purchased_form in crud.user.get_by_discord_id(
+            db, discord_user.user.id
+        ).purchased_forms:
+            if ticket_in.form_id == purchased_form.id:
+                has_access = True
+
+                break
+
+    if not has_access:
+        raise HTTPException(
+            400, "This ticket is available only for customers who purchased it."
+        )
+
     ticket_create = TicketCreate(**ticket_in.model_dump())
 
     ticket = crud.ticket.create_with_author(

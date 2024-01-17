@@ -1,7 +1,9 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel
+
+from schemas.ticket.form import Form
 
 
 class UserBase(BaseModel):
@@ -20,6 +22,7 @@ class UserInDBBase(UserBase):
     id: str
     created_at: datetime
     last_login: datetime
+    purchased_forms: List[Form]
 
     class Config:
         from_attributes = True

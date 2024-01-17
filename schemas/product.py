@@ -2,22 +2,26 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+from utils.product import ProductOperation
+
 
 class ProductBase(BaseModel):
     name: str
     description: str
     image: Optional[str] = None
     price: float
+    connected_form_id: Optional[int] = None
 
 
 class ProductCreate(ProductBase):
-    command: str
+    operation: ProductOperation
 
 
 class ProductUpdate(ProductCreate):
     name: Optional[str] = None
     price: Optional[float] = None
-    command: Optional[str] = None
+    operation: Optional[ProductOperation] = None
+    description: Optional[str] = None
 
 
 class ProductInDBBase(ProductBase):
@@ -28,8 +32,8 @@ class ProductInDBBase(ProductBase):
 
 
 class Product(ProductInDBBase):
-    command: Optional[str] = None
+    operation: Optional[ProductOperation] = None
 
 
 class ProductInDB(ProductInDBBase):
-    command: str
+    operation: ProductOperation

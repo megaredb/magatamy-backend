@@ -18,8 +18,9 @@ class Form(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     name: Mapped[str] = mapped_column(String(64))
     questions: Mapped[List["Question"]] = relationship(
-        back_populates="form", order_by="Question.position"
+        back_populates="form", order_by="Question.position", cascade="all,delete"
     )
+    purchasable: Mapped[bool] = mapped_column(Boolean, default=False)
 
 
 class Question(Base):
@@ -52,7 +53,9 @@ class Ticket(Base):
     author: Mapped["User"] = relationship()
     form_id: Mapped[int] = mapped_column(ForeignKey("form.id"))
     form: Mapped["Form"] = relationship()
-    answers: Mapped[List["Answer"]] = relationship(back_populates="ticket")
+    answers: Mapped[List["Answer"]] = relationship(
+        back_populates="ticket", cascade="all,delete"
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.now(), nullable=False
     )

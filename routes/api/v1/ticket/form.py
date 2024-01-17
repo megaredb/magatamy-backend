@@ -15,7 +15,7 @@ router = APIRouter(prefix="/forms", tags=["forms"])
 @router.get("/", response_model=List[schemas.ticket.form.Form])
 async def read_forms(
     db: Annotated[Session, Depends(deps.get_db)],
-    _deps: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)],
+    guild_member: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)],
     skip: int = 0,
     limit: int = 100,
 ):
@@ -23,13 +23,33 @@ async def read_forms(
     Read all forms.
     """
 
-    return crud.form.get_multi(db=db, skip=skip, limit=limit)
+    forms = crud.form.get_multi(db=db, skip=skip, limit=limit)
+
+    resp = []
+
+    for form in forms:
+        form_schema: schemas.ticket.form.Form = schemas.ticket.form.Form.model_validate(
+            form
+        )
+
+        if form.purchasable:
+            form_schema.has_access = False
+
+            if (
+                form
+                in crud.user.get_by_discord_id(db, guild_member.user.id).purchased_forms
+            ):
+                form_schema.has_access = True
+
+        resp.append(form_schema)
+
+    return resp
 
 
 @router.get("/{form_id}", response_model=schemas.ticket.form.Form)
 async def read_form(
     db: Annotated[Session, Depends(deps.get_db)],
-    _deps: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)],
+    guild_member: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)],
     form_id: int,
 ):
     """
@@ -41,7 +61,18 @@ async def read_form(
     if not form:
         raise HTTPException(status_code=404, detail="Form not found")
 
-    return form
+    resp: schemas.ticket.form.Form = schemas.ticket.form.Form.model_validate(form)
+
+    if form.purchasable:
+        resp.has_access = False
+
+        if (
+            form
+            in crud.user.get_by_discord_id(db, guild_member.user.id).purchased_forms
+        ):
+            resp.has_access = True
+
+    return resp
 
 
 @router.post("/", response_model=schemas.ticket.form.Form)
