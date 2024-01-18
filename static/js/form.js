@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 </div>
                                 <div>
                                     ${forms}
+                                    <p style="padding-bottom: 16px;">Отправляя данную форму вы соглашаетесь с нашим соглашением и  политикой конфиденциальности!</p>
                                 </div>
                                 <h2>${commit['name']}</h2>
                             </div>
