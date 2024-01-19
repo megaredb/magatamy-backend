@@ -1,5 +1,9 @@
 from os import environ
 
+from dotenv import load_dotenv
+
+load_dotenv(".env" if not environ.get("DEV") else ".env.dev")
+
 BOT_TOKEN = environ["BOT_TOKEN"]
 CLIENT_SECRET = environ["CLIENT_SECRET"]
 CLIENT_ID = environ["CLIENT_ID"]
@@ -21,3 +25,4 @@ ENOT_API_KEY = environ["ENOT_API_KEY"]
 ENOT_API_SIGNATURE = environ["ENOT_API_SIGNATURE"]
 SHOP_ID = environ["SHOP_ID"]
 SHOP_NUM_ID = environ["SHOP_NUM_ID"]
+DATABASE_CONNECTION = environ["DATABASE_CONNECTION"]

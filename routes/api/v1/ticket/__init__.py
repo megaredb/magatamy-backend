@@ -28,7 +28,7 @@ async def read_own_tickets(
 
     user = crud.user.get_by_discord_id(db, discord_user.user.id)
 
-    tickets = crud.ticket.get_multi_by_author(db=db, author_id=user.id)
+    tickets = crud.ticket.get_multi_by_author(db=db, author_id=user.discord_id)
 
     tickets_schemas = []
 
@@ -110,7 +110,7 @@ async def create_ticket(
     if not crud.form.get(db, ticket_in.form_id):
         raise HTTPException(400, "Requested form is not found.")
 
-    last_ticket = crud.ticket.get_multi_by_author(db=db, author_id=user.id)
+    last_ticket = crud.ticket.get_multi_by_author(db=db, author_id=user.discord_id)
 
     if last_ticket:
         last_ticket = last_ticket[-1]
@@ -138,7 +138,7 @@ async def create_ticket(
     ticket_create = TicketCreate(**ticket_in.model_dump())
 
     ticket = crud.ticket.create_with_author(
-        db=db, obj_in=ticket_create, author_id=user.id
+        db=db, obj_in=ticket_create, author_id=user.discord_id
     )
 
     for answer_in in ticket_in.answers:
@@ -154,6 +154,5 @@ async def create_ticket(
     db.refresh(ticket)
 
     ticket_schema = schemas.ticket.Ticket.model_validate(ticket)
-    ticket_schema.member_id = ticket.author.discord_id
 
     return ticket_schema

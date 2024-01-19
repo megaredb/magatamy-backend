@@ -1,8 +1,9 @@
 import logging
+
 import alembic.config
+from sqlalchemy import text
 
 from db.session import SessionLocal
-from sqlalchemy import text
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

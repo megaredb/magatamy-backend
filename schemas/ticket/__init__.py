@@ -30,7 +30,7 @@ class TicketInDBBase(TicketBase):
     created_at: datetime
     status: TicketStatus
     answers: List[answer.Answer]
-    member_id: Optional[str] = None
+    author_id: Optional[str] = None
 
     class Config:
         from_attributes = True

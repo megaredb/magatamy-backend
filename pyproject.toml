@@ -20,6 +20,7 @@ rcon = "^2.4.4"
 python-dotenv = "^1.0.0"
 async-lru = "2.0.4"
 fastapi-cache2 = "^0.2.1"
+psycopg2 = "^2.9.9"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"

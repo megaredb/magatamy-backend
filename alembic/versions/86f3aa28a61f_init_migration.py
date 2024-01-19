@@ -1,8 +1,8 @@
 """Init migration.
 
-Revision ID: cec5d24aa0e2
+Revision ID: 86f3aa28a61f
 Revises: 
-Create Date: 2024-01-15 22:44:29.023346
+Create Date: 2024-01-18 16:00:33.389959
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'cec5d24aa0e2'
+revision: str = '86f3aa28a61f'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -28,13 +28,12 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_form_id'), 'form', ['id'], unique=False)
     op.create_table('user',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('discord_id', sa.String(length=32), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
-    sa.Column('last_login', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
+    sa.Column('discord_id', sa.String(length=32), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
+    sa.Column('last_login', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
+    sa.PrimaryKeyConstraint('discord_id')
     )
-    op.create_index(op.f('ix_user_id'), 'user', ['id'], unique=False)
+    op.create_index(op.f('ix_user_discord_id'), 'user', ['discord_id'], unique=False)
     op.create_table('product',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=64), nullable=False),
@@ -61,20 +60,20 @@ def upgrade() -> None:
     op.create_index(op.f('ix_question_id'), 'question', ['id'], unique=False)
     op.create_table('ticket',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('author_id', sa.Integer(), nullable=False),
+    sa.Column('author_id', sa.String(length=32), nullable=False),
     sa.Column('form_id', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.Column('status', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['author_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['author_id'], ['user.discord_id'], ),
     sa.ForeignKeyConstraint(['form_id'], ['form.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_ticket_id'), 'ticket', ['id'], unique=False)
     op.create_table('users_to_forms_associations',
-    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.String(length=32), nullable=False),
     sa.Column('form_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['form_id'], ['form.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.discord_id'], ),
     sa.PrimaryKeyConstraint('user_id', 'form_id')
     )
     op.create_table('answer',
@@ -103,7 +102,7 @@ def downgrade() -> None:
     op.drop_index(op.f('ix_product_price'), table_name='product')
     op.drop_index(op.f('ix_product_id'), table_name='product')
     op.drop_table('product')
-    op.drop_index(op.f('ix_user_id'), table_name='user')
+    op.drop_index(op.f('ix_user_discord_id'), table_name='user')
     op.drop_table('user')
     op.drop_index(op.f('ix_form_id'), table_name='form')
     op.drop_table('form')

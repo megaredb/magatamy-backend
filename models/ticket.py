@@ -17,6 +17,7 @@ class Form(Base):
     __tablename__ = "form"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     name: Mapped[str] = mapped_column(String(64))
+    extra_id: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     questions: Mapped[List["Question"]] = relationship(
         back_populates="form", order_by="Question.position", cascade="all,delete"
     )
@@ -49,7 +50,7 @@ class Ticket(Base):
     __tablename__ = "ticket"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    author_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    author_id: Mapped[str] = mapped_column(ForeignKey("user.discord_id"))
     author: Mapped["User"] = relationship()
     form_id: Mapped[int] = mapped_column(ForeignKey("form.id"))
     form: Mapped["Form"] = relationship()

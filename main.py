@@ -4,8 +4,6 @@ from dotenv import load_dotenv
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
 
-load_dotenv(".env" if not environ.get("DEV") else ".env.dev")
-
 from fastapi import FastAPI  # noqa: E402
 from starlette.middleware.cors import CORSMiddleware  # noqa: E402
 from starlette.staticfiles import StaticFiles  # noqa: E402

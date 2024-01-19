@@ -6,6 +6,7 @@ from schemas.ticket import question
 class FormBase(BaseModel):
     name: str
     purchasable: bool = False
+    extra_id: str
 
 
 class FormCreate(FormBase):
@@ -15,6 +16,7 @@ class FormCreate(FormBase):
 class FormUpdate(FormBase):
     name: Optional[str] = None
     purchasable: Optional[bool] = None
+    extra_id: Optional[str] = None
 
 
 class FormInDBBase(FormCreate):

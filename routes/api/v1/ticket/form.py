@@ -117,4 +117,7 @@ async def remove_form(
     Remove form.
     """
 
+    if not crud.form.get(db, _id=form_id):
+        raise HTTPException(404, "Form not found.")
+
     return crud.form.remove(db=db, _id=form_id)
