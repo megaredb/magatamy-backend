@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div class="trash-product">
                                 <div class="trash-product-top">
                                     <div class="trash-product-images">
-                                        <img class="trash-product-image" src="/static/image/test.png" alt="Product image">
+                                        <img class="trash-product-image" src="/static/image/${commits[i]['image']}" alt="Product image">
                                         <img class="trash-product-trash" id="${currentId}" src="/static/image/trash-bin.png" alt="Trash image">
                                     </div>
                                     <div class="trash-product-info">

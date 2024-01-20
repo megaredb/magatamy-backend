@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     let productСontainer = `
                         <div class="product-container">
                             <div class="product-image">
-                                <img src="/static/image/test.png" alt="Product image">
+                                <img src="/static/image/${commits[i]['image']}" alt="Product image">
                             </div>
                             <p>${commits[i]['name']}</p>
                             <button class="product-button" id="${commits[i]['id']}">Купить за ${commits[i]['price']} руб.</button>
