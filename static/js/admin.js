@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function addWhitelist(server, username) {
-        return fetch(`/api/v1/minecraft/${server}/whitelist/${username}`)
+        return fetch(`/api/v1/minecraft/${server}/whitelist/${username}`, {method: "POST"})
             .then(response => response.json())
             .then(commits => {})
     }
