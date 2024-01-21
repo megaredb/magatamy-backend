@@ -10,6 +10,8 @@ from routes.api import deps
 from routes.api.v1.discord.auth import auth_middleware, only_moderator
 from routes.api.v1.ticket import form, question
 from schemas import TicketCreate, TicketUpdate
+from utils import config
+from utils.discord.user import send_message
 from utils.ticket import TicketStatus
 
 router = APIRouter(prefix="/tickets", tags=["tickets"])
@@ -88,6 +90,23 @@ async def update_ticket(
         raise HTTPException(
             status_code=401, detail="Moderators can't change already processed tickets."
         )
+
+    try:
+        statuses = {
+            TicketStatus.OPEN: "открыта",
+            TicketStatus.CLOSED: "отклонена",
+            TicketStatus.ACCEPTED: "принята",
+        }
+
+        msg = (
+            f"> **<@{ticket.author_id}>, "
+            f'Ваша заявка "{ticket.form.name}"** получила новый статус!\n\n'
+            f"> Новый статус: *{statuses[TicketStatus(ticket.status)]}*."
+        )
+
+        await send_message("Bot", config.BOT_TOKEN, ticket.author_id, msg)
+    except HTTPException:
+        pass
 
     return crud.form.update(db=db, db_obj=ticket, obj_in=ticket_in)
 

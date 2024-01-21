@@ -89,3 +89,33 @@ async def get_guild_member(
             resp_json = err.response.text
 
         raise HTTPException(err.response.status_code, detail=resp_json)
+
+
+async def send_message(
+    token_type: str, access_token: str, user_id: str | int, content: str
+):
+    try:
+        response: Response
+        client: AsyncClient
+
+        async with AsyncClient() as client:
+            response = await client.post(
+                f"{DISCORD_API_ENDPOINT}/channels/{user_id}/messages",
+                headers={"Authorization": f"{token_type} {access_token}"},
+                data={"content": content},
+            )
+
+        response.raise_for_status()
+
+    except (JSONDecodeError, UnicodeDecodeError, ValueError):
+        raise HTTPException(status_code=502, detail="Discord response decoding error.")
+
+    except HTTPStatusError as err:
+        resp_json: dict | str
+        # Fix it later.
+        try:
+            resp_json = err.response.json()
+        except JSONDecodeError:
+            resp_json = err.response.text
+
+        raise HTTPException(err.response.status_code, detail=resp_json)
