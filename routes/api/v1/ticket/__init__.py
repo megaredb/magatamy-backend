@@ -34,7 +34,6 @@ async def read_own_tickets(
 
     for ticket in tickets:
         ticket_schema = schemas.ticket.Ticket.model_validate(ticket)
-        ticket_schema.member_id = ticket.author.discord_id
 
         tickets_schemas.append(ticket_schema)
 
@@ -67,7 +66,6 @@ async def read_tickets(
 
     for ticket in tickets:
         ticket_schema = schemas.ticket.Ticket.model_validate(ticket)
-        ticket_schema.member_id = ticket.author.discord_id
 
         tickets_schemas.append(ticket_schema)
 
