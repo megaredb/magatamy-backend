@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener('click', function (event) {
         if (event.target.classList.contains('request-button-v')) {
             var data = event.target.classList[1].split("-");
-            var server = (data[0] == 2) ? "vanilla" : "vanilla-plus";
+            var server = (data[0] == 2) ? "vanilla-plus" : "vanilla";
             var username = data[1];
 
             var postData = {
