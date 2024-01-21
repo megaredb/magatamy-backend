@@ -6,6 +6,7 @@ from httpx import HTTPStatusError, AsyncClient, Response
 
 from schemas import DiscordUser
 from schemas.discord import DiscordGuildMember
+from utils import config
 from utils.config import (
     DISCORD_API_ENDPOINT,
     DISCORD_GUILD_ID,
@@ -91,31 +92,33 @@ async def get_guild_member(
         raise HTTPException(err.response.status_code, detail=resp_json)
 
 
-async def send_message(
-    token_type: str, access_token: str, user_id: str | int, content: str
-):
-    try:
-        response: Response
-        client: AsyncClient
+async def create_dm(user_id: str | int) -> Response:
+    client: AsyncClient
 
-        async with AsyncClient() as client:
-            response = await client.post(
-                f"{DISCORD_API_ENDPOINT}/channels/{user_id}/messages",
-                headers={"Authorization": f"{token_type} {access_token}"},
-                data={"content": content},
-            )
+    async with AsyncClient() as client:
+        response = await client.post(
+            f"{DISCORD_API_ENDPOINT}/users/@me/channels",
+            headers={"Authorization": f"Bot {config.BOT_TOKEN}"},
+            json={"recipient_id": str(user_id)},
+        )
 
-        response.raise_for_status()
+        return response
 
-    except (JSONDecodeError, UnicodeDecodeError, ValueError):
-        raise HTTPException(status_code=502, detail="Discord response decoding error.")
 
-    except HTTPStatusError as err:
-        resp_json: dict | str
-        # Fix it later.
-        try:
-            resp_json = err.response.json()
-        except JSONDecodeError:
-            resp_json = err.response.text
+async def send_message(user_id: str | int, content: str) -> Response | None:
+    response: Response
+    client: AsyncClient
 
-        raise HTTPException(err.response.status_code, detail=resp_json)
+    dm_response = await create_dm(user_id)
+
+    if dm_response.status_code != 200:
+        return
+
+    async with AsyncClient() as client:
+        response = await client.post(
+            f"{DISCORD_API_ENDPOINT}/channels/{dm_response.json().get('id')}/messages",
+            headers={"Authorization": f"Bot {config.BOT_TOKEN}"},
+            data={"content": content},
+        )
+
+        return response

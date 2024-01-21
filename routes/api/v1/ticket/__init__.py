@@ -91,22 +91,19 @@ async def update_ticket(
             status_code=401, detail="Moderators can't change already processed tickets."
         )
 
-    try:
-        statuses = {
-            TicketStatus.OPEN: "открыта",
-            TicketStatus.CLOSED: "отклонена",
-            TicketStatus.ACCEPTED: "принята",
-        }
+    statuses = {
+        TicketStatus.OPEN: "открыта",
+        TicketStatus.CLOSED: "отклонена",
+        TicketStatus.ACCEPTED: "принята",
+    }
 
-        msg = (
-            f"> **<@{ticket.author_id}>, "
-            f'Ваша заявка "{ticket.form.name}"** получила новый статус!\n\n'
-            f"> Новый статус: *{statuses[TicketStatus(ticket.status)]}*."
-        )
+    msg = (
+        f"> **<@{ticket.author_id}>, "
+        f'Ваша заявка "{ticket.form.name}"** получила новый статус!\n\n'
+        f"> Новый статус: *{statuses[TicketStatus(ticket.status)]}*."
+    )
 
-        await send_message("Bot", config.BOT_TOKEN, ticket.author_id, msg)
-    except HTTPException:
-        pass
+    await send_message(ticket.author_id, msg)
 
     return crud.form.update(db=db, db_obj=ticket, obj_in=ticket_in)
 
