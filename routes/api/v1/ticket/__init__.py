@@ -100,7 +100,7 @@ async def update_ticket(
     msg = (
         f"> **<@{ticket.author_id}>, "
         f'Ваша заявка "{ticket.form.name}" получила новый статус!**\n> \n'
-        f"> Новый статус: *{statuses[TicketStatus(ticket.status)]}*."
+        f"> Новый статус: *{statuses[TicketStatus(ticket_in.status)]}*."
     )
 
     await send_message(ticket.author_id, msg)
