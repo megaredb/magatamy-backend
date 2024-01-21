@@ -73,6 +73,8 @@ async def get_guild_member(
 
         if not guild_member.nick:
             guild_member.nick = guild_member.user.global_name
+            if not guild_member.nick:
+                guild_member.nick = guild_member.user.username
         if not guild_member.avatar:
             guild_member.avatar = guild_member.user.avatar
 

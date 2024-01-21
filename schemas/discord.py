@@ -8,7 +8,7 @@ from utils.config import DISCORD_ADMIN_ROLE_ID, DISCORD_MODERATOR_ROLE_ID
 class DiscordUser(BaseModel):
     id: str
     username: str
-    global_name: str
+    global_name: Optional[str] = None
     discriminator: str
     avatar: str
     flags: int
