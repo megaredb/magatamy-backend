@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
 
-                    var imgSrc = (formId === 2) ? "static/image/vanilla.png" : "static/image/vanilla-plus.png";
+                    var imgSrc = (formId === 2) ? "static/image/vanilla-plus.png" : "static/image/vanilla.png";
 
                     for (var i = 0; i < answersAll.length; i++) {
                         if (formAnswers[i]['title'] === "Ник") var username = answersAll[i]['text_value'];
