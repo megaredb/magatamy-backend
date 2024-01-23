@@ -18,12 +18,30 @@ from utils.discord.user import get_guild_member
 router = APIRouter(prefix="/discord", tags=["discord"])
 
 
+def users_by_bot_key_builder(
+    func,
+    namespace: str = "",
+    *,
+    request: Request = None,
+    response: Response = None,
+    **kwargs,
+):
+    return ":".join(
+        [
+            namespace,
+            request.method.lower(),
+            request.url.path,
+            repr(sorted(request.query_params.items())),
+        ]
+    )
+
+
 @router.get(
     "/users-by-bot/{user_id}",
     response_model=schemas.DiscordGuildMember,
     response_model_exclude_unset=True,
 )
-@cache(expire=30)
+@cache(expire=300, key_builder=users_by_bot_key_builder)
 async def get_user_by_bot(user_id: int | str):
     """
     Read Discord user by Discord id. Request to Discord is sent from bot.
@@ -37,7 +55,7 @@ async def get_user_by_bot(user_id: int | str):
     "/users/@me",
     response_model=schemas.DiscordGuildMember,
 )
-@cache(expire=1)
+@cache(expire=60)
 async def get_self(
     discord_user: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)]
 ):

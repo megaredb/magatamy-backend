@@ -4,13 +4,16 @@ from async_lru import alru_cache
 from fastapi import HTTPException
 from httpx import HTTPStatusError, AsyncClient, Response
 
+import schemas
+from models import Ticket
 from schemas import DiscordUser
-from schemas.discord import DiscordGuildMember
+from schemas.discord import DiscordGuildMember, CreateDiscordMessage
 from utils import config
 from utils.config import (
     DISCORD_API_ENDPOINT,
     DISCORD_GUILD_ID,
 )
+from utils.ticket import TicketStatus
 
 
 @alru_cache(maxsize=1024, typed=True, ttl=60)
@@ -107,7 +110,9 @@ async def create_dm(user_id: str | int) -> Response:
         return response
 
 
-async def send_message(user_id: str | int, content: str) -> Response | None:
+async def send_message(
+    user_id: str | int, msg: CreateDiscordMessage
+) -> Response | None:
     response: Response
     client: AsyncClient
 
@@ -116,11 +121,81 @@ async def send_message(user_id: str | int, content: str) -> Response | None:
     if dm_response.status_code != 200:
         return
 
+    msg_data = msg.model_dump(mode="json", exclude_unset=True, exclude_none=True)
+
     async with AsyncClient() as client:
         response = await client.post(
             f"{DISCORD_API_ENDPOINT}/channels/{dm_response.json().get('id')}/messages",
             headers={"Authorization": f"Bot {config.BOT_TOKEN}"},
-            data={"content": content},
+            json=msg_data,
         )
 
         return response
+
+
+async def send_ticket_update(ticket: Ticket, ticket_in: schemas.TicketUpdate):
+    statuses = {
+        TicketStatus.OPEN: "открыта",
+        TicketStatus.CLOSED: "отклонена",
+        TicketStatus.ACCEPTED: "принята",
+    }
+
+    msg = schemas.discord.CreateDiscordMessage()
+
+    msg.embeds = [
+        {
+            "title": "Добро пожаловать на Второй сезон! :slight_smile:",
+            "description": "Приветствуем тебя в нашем втором сезоне. Вот несколько полезных ссылок для начала:",
+            "fields": [
+                {"name": "Айпи сервера", "value": "plus.magatamy.com"},
+                {
+                    "name": "Онлайн карта 2-го сезона",
+                    "value": "[Ссылка](http://host-plus.magatamy.com:25582/)",
+                },
+                {
+                    "name": "Вики",
+                    "value": "[Ссылка на вики](https://magatamy-1.gitbook.io/magatamy)",
+                },
+                {
+                    "name": "Наш Дискрд",
+                    "value": "[magatamy](https://discord.gg/TntRVqWGHk)",
+                },
+                {
+                    "name": "Наш сайт",
+                    "value": "[magatamy.com](https://magatamy.com/)",
+                },
+            ],
+            "footer": {"text": "Спасибо за присоединение! Удачи в новом сезоне."},
+            "image": {
+                "url": (
+                    "https://media.discordapp.net/attachments/1163167620992860371/"
+                    "1199438645065678968/vanilla_plus_16.png"
+                )
+            },
+        }
+    ]
+
+    match ticket.form.extra_id:
+        case "vanilla" if TicketStatus(ticket_in.status) == TicketStatus.ACCEPTED:
+            msg.embeds[0]["fields"][0]["value"] = "mc.magatamy.com"
+            msg.embeds[0]["fields"][1][
+                "value"
+            ] = "[Ссылка](http://host-mc.magatamy.com:25673/)"
+            msg.embeds[0]["image"]["url"] = (
+                "https://media.discordapp.net/attachments/1163167620992860371/"
+                "1199438660584620222/vanilla_16.png"
+            )
+
+        case "vanilla-plus" if TicketStatus(ticket_in.status) == TicketStatus.ACCEPTED:
+            pass
+
+        case _:
+            msg.embeds = []
+            msg.attachments = []
+            msg.content = (
+                f"> **<@{ticket.author_id}>, "
+                f'Ваша заявка "{ticket.form.name}" получила новый статус!**\n> \n'
+                f"> Новый статус: *{statuses[TicketStatus(ticket_in.status)]}*."
+            )
+
+    await send_message(ticket.author_id, msg)

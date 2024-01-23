@@ -29,3 +29,9 @@ class DiscordGuildMember(BaseModel):
 
     def is_admin(self):
         return self.user.id in config.ADMINS or DISCORD_ADMIN_ROLE_ID in self.roles
+
+
+class CreateDiscordMessage(BaseModel):
+    content: Optional[str] = None
+    embeds: Optional[list[dict]] = []
+    attachments: Optional[list[dict]] = []
