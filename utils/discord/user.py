@@ -111,21 +111,24 @@ async def create_dm(user_id: str | int) -> Response:
 
 
 async def send_message(
-    user_id: str | int, msg: CreateDiscordMessage
+    channel_id: str | int, msg: CreateDiscordMessage, is_dm: bool = True
 ) -> Response | None:
     response: Response
     client: AsyncClient
 
-    dm_response = await create_dm(user_id)
+    if is_dm:
+        dm_response = await create_dm(channel_id)
 
-    if dm_response.status_code != 200:
-        return
+        if dm_response.status_code != 200:
+            return
+
+        channel_id = dm_response.json().get("id")
 
     msg_data = msg.model_dump(mode="json", exclude_unset=True, exclude_none=True)
 
     async with AsyncClient() as client:
         response = await client.post(
-            f"{DISCORD_API_ENDPOINT}/channels/{dm_response.json().get('id')}/messages",
+            f"{DISCORD_API_ENDPOINT}/channels/{channel_id}/messages",
             headers={"Authorization": f"Bot {config.BOT_TOKEN}"},
             json=msg_data,
         )
@@ -133,7 +136,9 @@ async def send_message(
         return response
 
 
-async def send_ticket_update(ticket: Ticket, ticket_in: schemas.TicketUpdate):
+async def send_ticket_update(
+    ticket: Ticket, ticket_in: schemas.TicketUpdate, updated_by: DiscordGuildMember
+):
     statuses = {
         TicketStatus.OPEN: "открыта",
         TicketStatus.CLOSED: "отклонена",
@@ -175,8 +180,11 @@ async def send_ticket_update(ticket: Ticket, ticket_in: schemas.TicketUpdate):
         }
     ]
 
+    prev_status = TicketStatus(ticket.status)
+    status = TicketStatus(ticket_in.status)
+
     match ticket.form.extra_id:
-        case "vanilla" if TicketStatus(ticket_in.status) == TicketStatus.ACCEPTED:
+        case "vanilla" if status == TicketStatus.ACCEPTED:
             msg.embeds[0]["fields"][0]["value"] = "mc.magatamy.com"
             msg.embeds[0]["fields"][1][
                 "value"
@@ -186,7 +194,7 @@ async def send_ticket_update(ticket: Ticket, ticket_in: schemas.TicketUpdate):
                 "1199438660584620222/vanilla_16.png"
             )
 
-        case "vanilla-plus" if TicketStatus(ticket_in.status) == TicketStatus.ACCEPTED:
+        case "vanilla-plus" if status == TicketStatus.ACCEPTED:
             pass
 
         case _:
@@ -194,8 +202,24 @@ async def send_ticket_update(ticket: Ticket, ticket_in: schemas.TicketUpdate):
             msg.attachments = []
             msg.content = (
                 f"> **<@{ticket.author_id}>, "
-                f'Ваша заявка "{ticket.form.name}" получила новый статус!**\n> \n'
-                f"> Новый статус: *{statuses[TicketStatus(ticket_in.status)]}*."
+                f'Ваша заявка "{ticket.form.name}" с ID {ticket.id} получила новый статус!**\n> \n'
+                f"> Новый статус: *{statuses[status]}*."
             )
 
+    log_msg = schemas.discord.CreateDiscordMessage()
+    log_msg.embeds = [
+        {
+            "title": f"Обновление тикета с ID {ticket.id}",
+            "description": (
+                f"**Тикет обновлен пользователем <@{updated_by.user.id}>**\n"
+                f"**Старый статус:** {statuses[prev_status]}\n"
+                f"**Новый статус:** {statuses[status]}\n\n"
+                f"**Форма тикета:** {ticket.form.name} (ID: {ticket.form_id})\n"
+                f"**Автор тикета:** <@{ticket.author_id}>"
+            ),
+            "color": 5814783,
+        }
+    ]
+
+    await send_message(config.DISCORD_LOG_CHANNEL_ID, log_msg, False)
     await send_message(ticket.author_id, msg)

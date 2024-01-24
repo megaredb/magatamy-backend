@@ -90,7 +90,7 @@ async def update_ticket(
             status_code=401, detail="Moderators can't change already processed tickets."
         )
 
-    await send_ticket_update(ticket, ticket_in)
+    await send_ticket_update(ticket, ticket_in, guild_member)
 
     return crud.form.update(db=db, db_obj=ticket, obj_in=ticket_in)
 
