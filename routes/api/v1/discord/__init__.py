@@ -41,7 +41,7 @@ def users_by_bot_key_builder(
     response_model=schemas.DiscordGuildMember,
     response_model_exclude_unset=True,
 )
-@cache(expire=300, key_builder=users_by_bot_key_builder)
+@cache(expire=600, key_builder=users_by_bot_key_builder)
 async def get_user_by_bot(user_id: int | str):
     """
     Read Discord user by Discord id. Request to Discord is sent from bot.
