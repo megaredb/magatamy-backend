@@ -9,6 +9,7 @@ from routes.api.v1.discord import auth_middleware
 from routes.api.v1.discord.auth import only_moderator
 from schemas import DiscordGuildMember
 from utils import config
+from utils.discord.user import send_message
 from utils.minecraft import ServerEnum, SERVERS
 
 router = APIRouter(prefix="/minecraft", tags=["minecraft"])
@@ -63,10 +64,10 @@ def get_online_count(
 @router.post(
     "/{server}/whitelist/{username}",
 )
-def post_to_whitelist(
+async def post_to_whitelist(
     server: ServerEnum,
     username: str,
-    _deps: Annotated[DiscordGuildMember, Depends(only_moderator)],
+    guild_member: Annotated[DiscordGuildMember, Depends(only_moderator)],
 ):
     server_host = SERVERS[server]
 
@@ -74,6 +75,12 @@ def post_to_whitelist(
         "%s/whitelist/%s" % (server_host, username),
         headers={"Authorization": config.MC_SERVER_KEY},
     )
+
+    msg = schemas.discord.CreateDiscordMessage()
+    msg.content = (
+        f"Пользователь <@{guild_member.user.id}> добавляет в вайтлист {username}"
+    )
+    await send_message(config.DISCORD_LOG_CHANNEL_ID, msg, False)
 
     if resp.status_code != 200:
         raise HTTPException(400)
@@ -84,10 +91,10 @@ def post_to_whitelist(
 @router.delete(
     "/{server}/whitelist/{username}",
 )
-def remove_from_whitelist(
+async def remove_from_whitelist(
     server: ServerEnum,
     username: str,
-    _deps: Annotated[DiscordGuildMember, Depends(only_moderator)],
+    guild_member: Annotated[DiscordGuildMember, Depends(only_moderator)],
 ):
     server_host = SERVERS[server]
 
@@ -95,6 +102,12 @@ def remove_from_whitelist(
         "%s/whitelist/%s" % (server_host, username),
         headers={"Authorization": config.MC_SERVER_KEY},
     )
+
+    msg = schemas.discord.CreateDiscordMessage()
+    msg.content = (
+        f"Пользователь <@{guild_member.user.id}> удаляет из вайтлиста {username}"
+    )
+    await send_message(config.DISCORD_LOG_CHANNEL_ID, msg, False)
 
     if resp.status_code != 200:
         raise HTTPException(400)
