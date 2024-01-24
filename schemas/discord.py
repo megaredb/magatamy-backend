@@ -9,13 +9,13 @@ class DiscordUser(BaseModel):
     id: str
     username: str
     global_name: Optional[str] = None
-    discriminator: str
-    avatar: str
-    flags: int
+    discriminator: Optional[str] = None
+    avatar: Optional[str]
+    flags: Optional[int] = None
     banner: Optional[str] = None
     accent_color: Optional[int] = None
-    premium_type: int
-    public_flags: int
+    premium_type: Optional[int] = None
+    public_flags: Optional[int] = None
 
 
 class DiscordGuildMember(BaseModel):
