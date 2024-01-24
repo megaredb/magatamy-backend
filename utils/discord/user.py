@@ -238,6 +238,4 @@ async def send_ticket_update(
 
 
 async def send_roles_update(user_id: str, server: ServerEnum):
-    await give_role(
-        config.DISCORD_GUILD_ID, user_id, ROLE_FROM_SERVER[server]
-    )
+    await give_role(config.DISCORD_GUILD_ID, user_id, ROLE_FROM_SERVER[server])
