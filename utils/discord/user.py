@@ -13,6 +13,8 @@ from utils.config import (
     DISCORD_API_ENDPOINT,
     DISCORD_GUILD_ID,
 )
+from utils.discord import ROLE_FROM_SERVER
+from utils.minecraft import ServerEnum
 from utils.ticket import TicketStatus
 
 
@@ -136,6 +138,16 @@ async def send_message(
         return response
 
 
+async def give_role(guild_id: str, user_id: str, role_id: str) -> Response | None:
+    async with AsyncClient() as client:
+        response = await client.put(
+            f"{DISCORD_API_ENDPOINT}/guilds/{guild_id}/members/{user_id}/roles/{role_id}",
+            headers={"Authorization": f"Bot {config.BOT_TOKEN}"},
+        )
+
+        return response
+
+
 async def send_ticket_update(
     ticket: Ticket, ticket_in: schemas.TicketUpdate, updated_by: DiscordGuildMember
 ):
@@ -181,7 +193,7 @@ async def send_ticket_update(
     ]
 
     prev_status = TicketStatus(ticket.status)
-    status = TicketStatus(ticket_in.status)
+    status = ticket_in.status
 
     match ticket.form.extra_id:
         case "vanilla" if status == TicketStatus.ACCEPTED:
@@ -223,3 +235,9 @@ async def send_ticket_update(
 
     await send_message(config.DISCORD_LOG_CHANNEL_ID, log_msg, False)
     await send_message(ticket.author_id, msg)
+
+
+async def send_roles_update(guild_member: DiscordGuildMember, server: ServerEnum):
+    await give_role(
+        config.DISCORD_GUILD_ID, guild_member.user.id, ROLE_FROM_SERVER[server]
+    )

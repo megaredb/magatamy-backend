@@ -10,7 +10,8 @@ from routes.api import deps
 from routes.api.v1.discord.auth import auth_middleware, only_moderator
 from routes.api.v1.ticket import form, question
 from schemas import TicketCreate, TicketUpdate
-from utils.discord.user import send_message, send_ticket_update
+from utils.discord.user import send_message, send_ticket_update, send_roles_update
+from utils.minecraft import ServerEnum
 from utils.ticket import TicketStatus
 
 router = APIRouter(prefix="/tickets", tags=["tickets"])
@@ -91,6 +92,9 @@ async def update_ticket(
         )
 
     await send_ticket_update(ticket, ticket_in, guild_member)
+
+    if ticket_in.status == TicketStatus.ACCEPTED:
+        await send_roles_update(guild_member, ServerEnum(ticket.form.extra_id))
 
     return crud.form.update(db=db, db_obj=ticket, obj_in=ticket_in)
 

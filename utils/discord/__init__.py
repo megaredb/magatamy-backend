@@ -2,9 +2,13 @@ from urllib.parse import urlencode
 
 from httpx import post
 from utils import config
-
+from utils.minecraft import ServerEnum
 
 HEADERS = {"Content-Type": "application/x-www-form-urlencoded"}
+ROLE_FROM_SERVER = {
+    ServerEnum.Vanilla: config.DISCORD_VANILLA_ROLE_ID,
+    ServerEnum.VanillaPlus: config.DISCORD_VANILLA_PLUS_ROLE_ID,
+}
 SCOPES = "identify guilds.members.read"
 
 
