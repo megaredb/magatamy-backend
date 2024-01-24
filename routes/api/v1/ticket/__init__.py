@@ -94,7 +94,7 @@ async def update_ticket(
     await send_ticket_update(ticket, ticket_in, guild_member)
 
     if ticket_in.status == TicketStatus.ACCEPTED:
-        await send_roles_update(guild_member, ServerEnum(ticket.form.extra_id))
+        await send_roles_update(ticket.author_id, ServerEnum(ticket.form.extra_id))
 
     return crud.form.update(db=db, db_obj=ticket, obj_in=ticket_in)
 
