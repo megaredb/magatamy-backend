@@ -77,9 +77,14 @@ async def post_to_whitelist(
     )
 
     msg = schemas.discord.CreateDiscordMessage()
-    msg.content = (
-        f"Пользователь <@{guild_member.user.id}> добавляет в вайтлист {username}"
-    )
+    msg.embeds = [
+        {
+            "title": "Изменение белого списка",
+            "description": (
+                f"Пользователь <@{guild_member.user.id}> добавляет в белый список {username} на сервере {server}"
+            ),
+        }
+    ]
     await send_message(config.DISCORD_LOG_CHANNEL_ID, msg, False)
 
     if resp.status_code != 200:
@@ -104,9 +109,14 @@ async def remove_from_whitelist(
     )
 
     msg = schemas.discord.CreateDiscordMessage()
-    msg.content = (
-        f"Пользователь <@{guild_member.user.id}> удаляет из вайтлиста {username}"
-    )
+    msg.embeds = [
+        {
+            "title": "Изменение белого списка",
+            "description": (
+                f"Пользователь <@{guild_member.user.id}> удаляет из белого списка {username} на сервере {server}"
+            ),
+        }
+    ]
     await send_message(config.DISCORD_LOG_CHANNEL_ID, msg, False)
 
     if resp.status_code != 200:
