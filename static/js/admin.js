@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
 
-                    var imgSrc = (formId === 2) ? "static/image/vanilla.png" : "static/image/vanilla-plus.png";
+                    var imgSrc = (formId === 2) ? "static/image/vanilla-plus.png" : "static/image/vanilla.png";
 
                     for (var i = 0; i < answersAll.length; i++) {
                         if (formAnswers[i]['title'] === "Ник") var username = answersAll[i]['text_value'];
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function addWhitelist(server, username) {
-        return fetch(`/api/v1/minecraft/${server}/whitelist/${username}`)
+        return fetch(`/api/v1/minecraft/${server}/whitelist/${username}`, {method: "POST"})
             .then(response => response.json())
             .then(commits => {})
     }
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener('click', function (event) {
         if (event.target.classList.contains('request-button-v')) {
             var data = event.target.classList[1].split("-");
-            var server = (data[0] == 2) ? "vanilla" : "vanilla-plus";
+            var server = (data[0] == 2) ? "vanilla-plus" : "vanilla";
             var username = data[1];
 
             var postData = {
