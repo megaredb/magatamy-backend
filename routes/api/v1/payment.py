@@ -1,6 +1,7 @@
 import hashlib
 import hmac
 import uuid
+from datetime import datetime
 from json import dumps
 from typing import Annotated, List
 
@@ -45,11 +46,20 @@ def create_payment_url(
     db: Annotated[Session, Depends(deps.get_db)],
     products: List[int],
     response: Response,
+    promo: str = None,
 ) -> InvoiceCreateResponse:
     products = list(set(products))
 
     if not products:
         raise HTTPException(400, "No products passed.")
+
+    promo_obj: crud.promo.model | None = None
+
+    if promo and (
+        not (promo_obj := crud.promo.get_by_name(db, promo))
+        or promo_obj.valid_to < datetime.now()
+    ):
+        raise HTTPException(400, "No promo was found")
 
     amount = 0
 
@@ -69,16 +79,24 @@ def create_payment_url(
 
         amount += product.price
 
+    if promo_obj:
+        amount -= (amount / 100) * promo_obj.percent
+
+    amount = int(amount)
+
     headers = {"x-api-key": config.ENOT_API_KEY}
 
     data = {
         "amount": amount,
         "order_id": str(uuid.uuid4()),
         "shop_id": config.SHOP_ID,
-        "comment": f"Оплата товаров | {guild_member.user.id} | {products}",
+        "comment": (
+            f"Оплата товаров | {guild_member.user.id} | {products} | {promo if promo else '-'}"
+        ),
         "custom_fields": {
             "products": products,
             "guild_member_id": guild_member.user.id,
+            "promo": promo,
         },
     }
 

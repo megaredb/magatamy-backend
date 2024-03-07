@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Integer, String, Float, ForeignKey
+from sqlalchemy import Integer, String, Float, ForeignKey, DateTime, func
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 from db.base_class import Base
@@ -20,3 +20,14 @@ class Product(Base):
     operation: Mapped[int] = mapped_column(Integer, nullable=False)
     connected_form_id: Mapped[int] = mapped_column(ForeignKey("form.id"))
     connected_form: Mapped["Form"] = relationship()
+
+
+class Promo(Base):
+    __tablename__ = "promo"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+
+    name: Mapped[str] = mapped_column(String)
+    percent: Mapped[float] = mapped_column(Float)
+    usages: Mapped[int] = mapped_column(Integer, default=0)
+    valid_to = mapped_column(DateTime)

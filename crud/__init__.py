@@ -1,4 +1,4 @@
-from .crud_product import product
+from .crud_product import product, promo
 from .crud_auth import user
 from .crud_ticket import ticket
 from .crud_ticket.answer import answer
