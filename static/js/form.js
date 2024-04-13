@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    var buttonVanilla = document.querySelector('.button-vanilla');
+//    var buttonVanilla = document.querySelector('.button-vanilla');
     var buttonVanillaPlus = document.querySelector('.button-vanilla-plus');
 
     var form = document.querySelector('.form');
@@ -73,10 +73,10 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     }
 
-    buttonVanilla.addEventListener('click', function () {
-        setProducts(0)
-        formСontainer.style.display = 'flex';
-    });
+//    buttonVanilla.addEventListener('click', function () {
+//        setProducts(0)
+//        formСontainer.style.display = 'flex';
+//    });
 
     buttonVanillaPlus.addEventListener('click', function () {
         setProducts(1)
