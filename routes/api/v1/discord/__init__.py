@@ -11,7 +11,7 @@ from starlette.responses import Response, RedirectResponse
 import schemas
 from routes.api import deps
 from routes.api.v1.discord.auth import auth_middleware
-from utils.config import BOT_TOKEN
+from utils.config import BOT_TOKEN, FRONTEND_URI
 from utils.discord import exchange_code, get_auth_url, revoke_access_token
 from utils.discord.user import get_guild_member
 
@@ -118,7 +118,7 @@ async def get_auth_callback(
 
     expires = cookies.pop("expires_in")
 
-    resp = RedirectResponse("/")
+    resp = RedirectResponse(FRONTEND_URI)
 
     for cookie in cookies.keys():
         resp.set_cookie(
