@@ -1,8 +1,14 @@
 from datetime import datetime
+from enum import StrEnum
 
 from pydantic import BaseModel
 from utils import payment as payment_util
 from . import enot
+
+
+class PaymentProvider(StrEnum):
+    ENOT = "enot"
+    VOLET = "volet"
 
 
 class PaymentBase(BaseModel):

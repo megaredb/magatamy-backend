@@ -17,6 +17,7 @@ from models import Product, User
 from routes.api import deps
 from routes.api.v1.discord import auth_middleware
 from schemas import payment
+from schemas.payment import PaymentProvider
 from schemas.payment.enot import InvoiceCreateResponse
 from utils import config
 from utils.product import ProductOperation
@@ -40,8 +41,7 @@ def process_refund(db: Session, user: User, product: Product):
             crud.user.remove_purchased_form(db, user, form)
 
 
-@router.post("/payment-url")
-def create_payment_url(
+def _enot_payment_url(
     guild_member: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)],
     db: Annotated[Session, Depends(deps.get_db)],
     products: List[int],
@@ -113,6 +113,22 @@ def create_payment_url(
     response.status_code = enot_resp.status_code
 
     return resp_data
+
+
+@router.post("/payment-url")
+def create_payment_url(
+    guild_member: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)],
+    db: Annotated[Session, Depends(deps.get_db)],
+    products: List[int],
+    response: Response,
+    promo: str = None,
+    provider: PaymentProvider = PaymentProvider.ENOT,
+) -> InvoiceCreateResponse:
+    match provider:
+        case PaymentProvider.ENOT:
+            return _enot_payment_url(guild_member, db, products, response, promo)
+        case PaymentProvider.VOLET:
+            raise NotImplementedError
 
 
 def enot_check_signature(hook_body: dict, header_signature: str):

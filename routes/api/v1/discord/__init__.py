@@ -78,7 +78,7 @@ def logout(request: Request):
     """
     Logout from Discord.
     """
-    response = RedirectResponse("/")
+    response = RedirectResponse(FRONTEND_URI)
 
     cookies = request.cookies
     if access_token := cookies.get("access_token"):
