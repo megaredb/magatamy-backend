@@ -3,7 +3,7 @@ import logging
 import alembic.config
 from sqlalchemy import text
 
-from db.session import SessionLocal
+from backend.db.session import SessionLocal
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
