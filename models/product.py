@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Integer, String, Float, ForeignKey, DateTime, func
+from sqlalchemy import Integer, String, Float, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import mapped_column, Mapped, relationship
+from sqlalchemy.sql import expression
 
 from db.base_class import Base
 
@@ -20,6 +21,7 @@ class Product(Base):
     operation: Mapped[int] = mapped_column(Integer, nullable=False)
     connected_form_id: Mapped[int] = mapped_column(ForeignKey("form.id"))
     connected_form: Mapped["Form"] = relationship()
+    popular: Mapped[bool] = mapped_column(Boolean, server_default=expression.true())
 
 
 class Promo(Base):

@@ -1,5 +1,5 @@
 from typing import Optional, List
-from pydantic import BaseModel
+from pydantic import BaseModel, computed_field
 
 from utils import config
 from utils.config import DISCORD_ADMIN_ROLE_ID, DISCORD_MODERATOR_ROLE_ID
@@ -24,10 +24,14 @@ class DiscordGuildMember(BaseModel):
     avatar: Optional[str] = None
     roles: List[str]
 
-    def is_moderator(self):
-        return self.is_admin() or DISCORD_MODERATOR_ROLE_ID in self.roles
+    @computed_field
+    @property
+    def is_moderator(self) -> bool:
+        return self.is_admin or DISCORD_MODERATOR_ROLE_ID in self.roles
 
-    def is_admin(self):
+    @computed_field
+    @property
+    def is_admin(self) -> bool:
         return self.user.id in config.ADMINS or DISCORD_ADMIN_ROLE_ID in self.roles
 
 

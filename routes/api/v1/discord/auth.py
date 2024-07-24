@@ -46,7 +46,7 @@ async def only_moderator(
 ) -> schemas.DiscordGuildMember:
     discord_user = await auth_middleware(request, db)
 
-    if not discord_user.is_moderator():
+    if not discord_user.is_moderator:
         raise HTTPException(401, "Not authorized.")
 
     return discord_user
@@ -58,7 +58,7 @@ async def only_admin(
 ) -> schemas.DiscordGuildMember:
     discord_user = await auth_middleware(request, db)
 
-    if not discord_user.is_admin():
+    if not discord_user.is_admin:
         raise HTTPException(401, "Not authorized.")
 
     return discord_user

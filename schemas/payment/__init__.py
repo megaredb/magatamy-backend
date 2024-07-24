@@ -8,7 +8,6 @@ from . import enot
 
 class PaymentProvider(StrEnum):
     ENOT = "enot"
-    VOLET = "volet"
 
 
 class PaymentBase(BaseModel):

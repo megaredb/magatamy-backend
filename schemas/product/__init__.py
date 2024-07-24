@@ -11,6 +11,7 @@ class ProductBase(BaseModel):
     image: Optional[str] = None
     price: float
     connected_form_id: Optional[int] = None
+    popular: bool
 
 
 class ProductCreate(ProductBase):

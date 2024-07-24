@@ -41,7 +41,7 @@ def process_refund(db: Session, user: User, product: Product):
             crud.user.remove_purchased_form(db, user, form)
 
 
-def _enot_payment_url(
+def enot_payment_url(
     guild_member: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)],
     db: Annotated[Session, Depends(deps.get_db)],
     products: List[int],
@@ -126,9 +126,7 @@ def create_payment_url(
 ) -> InvoiceCreateResponse:
     match provider:
         case PaymentProvider.ENOT:
-            return _enot_payment_url(guild_member, db, products, response, promo)
-        case PaymentProvider.VOLET:
-            raise NotImplementedError
+            return enot_payment_url(guild_member, db, products, response, promo)
 
 
 def enot_check_signature(hook_body: dict, header_signature: str):

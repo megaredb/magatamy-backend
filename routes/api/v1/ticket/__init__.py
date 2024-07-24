@@ -86,7 +86,7 @@ async def update_ticket(
     if not ticket:
         raise HTTPException(status_code=404, detail="Ticket not found")
 
-    if ticket.status != TicketStatus.OPEN and not guild_member.is_admin():
+    if ticket.status != TicketStatus.OPEN and not guild_member.is_admin:
         raise HTTPException(
             status_code=401, detail="Moderators can't change already processed tickets."
         )
