@@ -3,10 +3,11 @@ import hmac
 import uuid
 from datetime import datetime
 from json import dumps
-from typing import Annotated, List
+from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Depends
 from httpx import post, HTTPError, Response as HTTPXResponse
+from mctools import RCONClient
 from sqlalchemy.orm import Session
 from starlette.requests import Request
 from starlette.responses import Response
@@ -16,68 +17,90 @@ from backend import schemas
 from backend.models import Product, User
 from backend.routes.api import deps
 from backend.routes.api.v1.discord import auth_middleware
-from backend.schemas import payment
+from backend.schemas import payment, UserUpdate
 from backend.schemas.payment import PaymentProvider
 from backend.schemas.payment.enot import InvoiceCreateResponse
 from backend.utils import config
+from backend.utils.config import (
+    MAIN_MC_SERVER_RCON_HOST,
+    MAIN_MC_SERVER_RCON_PORT,
+    MAIN_MC_SERVER_RCON_PASSWORD,
+)
 from backend.utils.product import ProductOperation
 
 router = APIRouter(prefix="/payment", tags=["payment"])
 
 
-def process_successful_payment(db: Session, user: User, product: Product):
+def process_product_purchase(
+    db: Session, user: User, product: Product, username: str | None = None
+):
     match ProductOperation(product.operation):
         case ProductOperation.TICKET_ACCESS:
             form = crud.form.get(db, product.connected_form_id)
 
             crud.user.add_purchased_form(db, user, form)
+        case ProductOperation.CUSTOM_COMMAND:
+            if not username:
+                raise HTTPException(400, "Username field not provided.")
+
+            with RCONClient(
+                MAIN_MC_SERVER_RCON_HOST,
+                MAIN_MC_SERVER_RCON_PORT,
+                timeout=10,
+            ) as rcon_client:
+                if (
+                    not rcon_client.login(MAIN_MC_SERVER_RCON_PASSWORD)
+                    or not rcon_client.is_connected()
+                ):
+                    raise HTTPException(500, "Unable to connect to Minecraft server.")
+
+                rcon_client.command(str(product.custom_command).format(player=username))
 
 
-def process_refund(db: Session, user: User, product: Product):
-    match ProductOperation(product.operation):
-        case ProductOperation.TICKET_ACCESS:
-            form = crud.form.get(db, product.connected_form_id)
+async def process_value_purchase(db: Session, user: User, value: int):
+    crud.user.update(db=db, db_obj=user, obj_in=UserUpdate(money=user.money + value))
 
-            crud.user.remove_purchased_form(db, user, form)
+
+# def process_product_refund(db: Session, user: User, product: Product):
+#     match ProductOperation(product.operation):
+#         case ProductOperation.TICKET_ACCESS:
+#             form = crud.form.get(db, product.connected_form_id)
+#
+#             crud.user.remove_purchased_form(db, user, form)
 
 
 def enot_payment_url(
     guild_member: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)],
     db: Annotated[Session, Depends(deps.get_db)],
-    products: List[int],
     response: Response,
+    value: int,
     promo: str = None,
 ) -> InvoiceCreateResponse:
-    products = list(set(products))
-
-    if not products:
-        raise HTTPException(400, "No products passed.")
-
     promo_obj: crud.promo.model | None = None
 
     if promo and (
         not (promo_obj := crud.promo.get_by_name(db, promo))
         or promo_obj.valid_to < datetime.now()
     ):
-        raise HTTPException(400, "No promo was found")
+        raise HTTPException(400, f"No promo `{promo}` was found")
 
-    amount = 0
+    amount = value
 
-    for product_id in products:
-        product = crud.product.get(db, product_id)
-
-        if not product:
-            raise HTTPException(404, f"Product with id {product_id} doesn't exists.")
-
-        user = crud.user.get_by_discord_id(db, guild_member.user.id)
-
-        if (
-            ProductOperation(product.operation) == ProductOperation.TICKET_ACCESS
-            and product.connected_form in user.purchased_forms
-        ):
-            raise HTTPException(400, f"Product with id {product_id} already purchased.")
-
-        amount += product.price
+    # for product_id in products:
+    #     product = crud.product.get(db, product_id)
+    #
+    #     if not product:
+    #         raise HTTPException(404, f"Product with id {product_id} doesn't exists.")
+    #
+    #     user = crud.user.get_by_discord_id(db, guild_member.user.id)
+    #
+    #     if (
+    #         ProductOperation(product.operation) == ProductOperation.TICKET_ACCESS
+    #         and product.connected_form in user.purchased_forms
+    #     ):
+    #         raise HTTPException(400, f"Product with id {product_id} already purchased.")
+    #
+    #     amount += product.price
 
     if promo_obj:
         amount -= (amount / 100) * promo_obj.percent
@@ -91,10 +114,10 @@ def enot_payment_url(
         "order_id": str(uuid.uuid4()),
         "shop_id": config.SHOP_ID,
         "comment": (
-            f"Оплата товаров | {guild_member.user.id} | {products} | {promo if promo else '-'}"
+            f"Пополнение баланса | {guild_member.user.id} | {value} mn | {promo if promo else '-'}"
         ),
         "custom_fields": {
-            "products": products,
+            "value": value,
             "guild_member_id": guild_member.user.id,
             "promo": promo,
         },
@@ -115,18 +138,51 @@ def enot_payment_url(
     return resp_data
 
 
+@router.get("/balance")
+def get_balance(
+    db: Annotated[Session, Depends(deps.get_db)],
+    discord_user: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)],
+) -> int:
+    return crud.user.get_by_discord_id(db, discord_user.user.id).money
+
+
+@router.post("/purchase")
+def purchase_product(
+    guild_member: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)],
+    db: Annotated[Session, Depends(deps.get_db)],
+    product_id: int,
+    username: str | None = None,
+):
+    user = crud.user.get_by_discord_id(db, guild_member.user.id)
+
+    if not product_id:
+        raise HTTPException(400, "Missing parameters.")
+
+    product = crud.product.get(db, product_id)
+
+    if not product:
+        raise HTTPException(404, "Product not found.")
+
+    if product.price > user.money:
+        raise HTTPException(400, "Not enough money to purchase.")
+
+    process_product_purchase(db, user, product, username)
+
+    crud.user.update(db, user, UserUpdate(money=user.money - product.price))
+
+
 @router.post("/payment-url")
 def create_payment_url(
     guild_member: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)],
     db: Annotated[Session, Depends(deps.get_db)],
-    products: List[int],
     response: Response,
+    value: int,
     promo: str = None,
     provider: PaymentProvider = PaymentProvider.ENOT,
 ) -> InvoiceCreateResponse:
     match provider:
         case PaymentProvider.ENOT:
-            return enot_payment_url(guild_member, db, products, response, promo)
+            return enot_payment_url(guild_member, db, response, value, promo)
 
 
 def enot_check_signature(hook_body: dict, header_signature: str):
@@ -152,25 +208,19 @@ def enot_payment_webhook(
     ):
         raise HTTPException(401, "Wrong x-api-sha256-signature.")
 
-    products = data.custom_fields.get("products")
+    value = data.custom_fields.get("value")
+
+    if not value:
+        raise HTTPException(400, "Missing value field.")
+
     guild_member_id = data.custom_fields.get("guild_member_id")
+    user = crud.user.get_by_discord_id(db, guild_member_id)
 
-    for product_id in products:
-        if not product_id or not guild_member_id:
-            raise HTTPException(400, "Missing parameters.")
+    if not user:
+        raise HTTPException(404, "User not found.")
 
-        product = crud.product.get(db, product_id)
-
-        if not product:
-            raise HTTPException(404, "Product not found.")
-
-        user = crud.user.get_by_discord_id(db, guild_member_id)
-
-        if not user:
-            raise HTTPException(404, "User not found.")
-
-        match type(data):
-            case payment.SuccessfulPayment:
-                process_successful_payment(db, user, product)
-            case payment.Refund:
-                process_refund(db, user, product)
+    match type(data):
+        case payment.SuccessfulPayment:
+            process_value_purchase(db, user, value)
+        case payment.Refund:
+            raise HTTPException(400, "Refund is not available.")

@@ -57,7 +57,7 @@ async def get_user_by_bot(user_id: int | str):
 )
 @cache(expire=60)
 async def get_self(
-    discord_user: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)]
+    discord_user: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)],
 ):
     """
     Get data from self Discord account and Magatamy guild.

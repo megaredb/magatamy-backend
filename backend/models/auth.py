@@ -17,6 +17,7 @@ class User(Base):
     created_at = mapped_column(DateTime, server_default=func.now())
     last_login = mapped_column(DateTime, server_default=func.now())
 
+    money: Mapped[int] = mapped_column(Integer, server_default="0", nullable=False)
     purchased_forms: Mapped[List["Form"]] = relationship(
         secondary=users_to_forms_associations
     )

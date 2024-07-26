@@ -16,10 +16,12 @@ class UserCreate(UserBase):
 
 class UserUpdate(BaseModel):
     last_login: Optional[datetime] = None
+    money: Optional[int] = None
 
 
 class UserInDBBase(UserBase):
     id: str
+    money: int
     created_at: datetime
     last_login: datetime
     purchased_forms: List[Form]
