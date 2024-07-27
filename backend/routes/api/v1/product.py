@@ -38,7 +38,7 @@ async def read_products(
         for product in products:
             product.custom_command = None
 
-    return
+    return products
 
 
 @router.post("/", response_model=schemas.Product)
