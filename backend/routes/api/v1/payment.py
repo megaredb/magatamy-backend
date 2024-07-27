@@ -168,7 +168,9 @@ def purchase_product(
 
     process_product_purchase(db, user, product, username)
 
-    crud.user.update(db, user, UserUpdate(money=user.money - product.price))
+    crud.user.update(
+        db=db, db_obj=user, obj_in=UserUpdate(money=user.money - product.price)
+    )
 
 
 @router.post("/payment-url")
