@@ -19,8 +19,8 @@ class Product(Base):
     description: Mapped[str] = mapped_column(String(1024))
     image: Mapped[str] = mapped_column(String(128))
     operation: Mapped[int] = mapped_column(Integer, nullable=False)
-    custom_command: Mapped[str] = mapped_column(String)
-    connected_form_id: Mapped[int] = mapped_column(ForeignKey("form.id"))
+    custom_command: Mapped[str] = mapped_column(String, nullable=True)
+    connected_form_id: Mapped[int] = mapped_column(ForeignKey("form.id"), nullable=True)
     connected_form: Mapped["Form"] = relationship()
     popular: Mapped[bool] = mapped_column(Boolean, server_default=expression.true())
 

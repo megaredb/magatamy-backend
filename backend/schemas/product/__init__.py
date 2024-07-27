@@ -12,6 +12,7 @@ class ProductBase(BaseModel):
     price: float
     connected_form_id: Optional[int] = None
     popular: bool
+    custom_command: Optional[str] = None
 
 
 class ProductCreate(ProductBase):

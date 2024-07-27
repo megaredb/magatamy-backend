@@ -37,7 +37,7 @@ async def lifespan(_app: FastAPI):
 
 app = FastAPI(openapi_tags=tags_metadata, lifespan=lifespan)
 
-origins = [FRONTEND_URI]
+origins = [FRONTEND_URI, FRONTEND_URI.removesuffix("/")]
 
 app.add_middleware(
     CORSMiddleware,  # noqa
