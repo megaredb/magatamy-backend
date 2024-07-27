@@ -119,9 +119,11 @@ def enot_payment_url(
         "custom_fields": {
             "value": value,
             "guild_member_id": guild_member.user.id,
-            "promo": promo,
         },
     }
+
+    if promo:
+        data["custom_fields"]["promo"] = promo
 
     enot_resp: HTTPXResponse
 
