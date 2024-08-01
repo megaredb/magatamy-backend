@@ -11,6 +11,7 @@ class ProductBase(BaseModel):
     image: Optional[str] = None
     price: float
     connected_form_id: Optional[int] = None
+    category: Optional[str] = None
     popular: bool
     custom_command: Optional[str] = None
 
