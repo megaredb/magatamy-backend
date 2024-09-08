@@ -55,7 +55,6 @@ async def get_user_by_bot(user_id: int | str):
     "/users/@me",
     response_model=schemas.DiscordGuildMember,
 )
-@cache(expire=60)
 async def get_self(
     discord_user: Annotated[schemas.DiscordGuildMember, Depends(auth_middleware)],
 ):
