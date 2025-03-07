@@ -1,4 +1,4 @@
-# Project Name
+# Magatamy old backend
 
 This repository contains the website for the Magatamy project.
 
